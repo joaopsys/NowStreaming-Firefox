@@ -1,0 +1,271 @@
+@font-face {
+    font-family: 'NS-Thead';
+    src: url('ADAM.CG PRO.otf');
+}
+body {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
+    background-color: #F8F8F8;
+    height:170px;
+    width:400px;
+    font-size: 75%;
+}
+footer{
+  color: gray;
+  font-size: smaller;
+  clear: both;
+  text-align: center;
+}
+input, textarea{
+  background-color: white;
+}
+input[type="text"] {
+  font-size: 8px;
+  font-weight: lighter;
+  font-variant: normal;
+  text-transform: uppercase;
+  color: #666666;
+  letter-spacing: 0.1em;
+
+  width: 253px;
+  text-align: center;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+}
+input[type="text"]:focus {
+  outline: none;
+}
+input[type="text"] {
+  padding: 4px;
+  border: solid 1px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+input[type="text"]:focus,
+input[type="text"].focus {
+  border: solid 1px #707070;
+  box-shadow: 0 0 5px 1px #969696;
+}
+textarea[type="text"]:focus {
+  outline: none;
+}
+textarea[type="text"] {
+  padding: 4px;
+  border: solid 1px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+textarea[type="text"]:focus,
+textarea[type="text"].focus {
+  border: solid 1px #707070;
+  box-shadow: 0 0 5px 1px #969696;
+}
+#loadingStreams,
+#loadingFollowing{
+  text-align: center!important;
+}
+#followAndOptionsTable{
+  width:100%;
+}
+#noStreams{
+  text-align: center!important;
+}
+#followCurrentButton,
+#unfollowCurrentButton{
+  float:left;
+  text-decoration: none;
+  color:#555;
+}
+#unfollowCurrentButton:hover{
+  color: #CC2929; 
+}
+#followCurrentButton:hover{
+  color: #29CC29; 
+}
+.currentMessageOptions,
+.currentMessage{
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 15px;
+}
+#toggleoptionsdiv{
+  text-align: center!important;
+}
+#toggleOptions{
+  text-decoration: none;
+  color: #555;
+}
+#toggleOptions:hover{
+  color: #2a5db0;
+}
+#optionsDiv{
+  font-size: 13px;
+  color: #000;
+}
+.optionsTitle{
+  text-align: center!important;
+  font-family: "NS-Thead";
+  font-weight: bold;
+  font-size: 15px;
+}
+#importFollowingButton{
+  float: right;
+}
+#exportFollowingButton,
+#importFollowingButton{
+  float:left;
+  text-decoration: none;
+  color:#555;
+}
+#importDiv,
+#textBox{
+  text-align: center!important;
+}
+#exportBox{
+    height:200px;
+    width:300px;
+}
+#syncTwitchButton{
+  text-decoration: none;
+  color: #555;
+}
+#syncTwitchButton:hover{
+  color: #6441a5;
+}
+#unfollowAllButton:hover{
+  color: #CC2929;
+}
+#exportFollowingButton:hover,
+#importFollowingButton:hover{
+  color: #2a5db0; 
+}
+#submitButton,
+#unfollowAllButton,
+#submitData{
+  text-decoration: none;
+  color: #555;
+}
+#submitButton:hover,
+#submitData:hover{
+  color: #29CC29; 
+}
+.importFromTwitchMessage,
+.unfollowAllMessage,
+.exportImportMessage{
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 15px;
+}
+#bottomButtonsTable,
+#streamersTable{
+  width:100%;
+  font-size: 12px;
+}
+#fastFollow a{
+  text-decoration: none;
+}
+#submitFastFollow{
+  color: #555; 
+}
+#submitFastFollow:hover{
+  color: #29CC29;
+}
+#importTwitchFailMessage,
+#importDataFailMessage,
+#fastFollowMessage{
+  text-align: center;
+}
+#streamersTable img:not(#loading1):not(.popout img){
+  width:20px;
+  height:20px;
+}
+#streamersTable{
+  text-transform: capitalize;
+  color: #555;
+  font-weight: 500;
+}
+#followingDiv thead,
+#streamersDiv thead{
+  font-family: "NS-Thead";
+}
+#streamersTable img:not(#loading1){
+  width:25px;
+  height:25px;
+}
+#thfirst{
+  text-align: left;
+}
+#streamersDiv a:not(.popout) {
+  color: #2a5db0;
+  float:left;
+}
+.popout {
+  float:left;
+  margin-right: 6px;
+}
+#streamersDiv a{
+  color: #555;
+  text-decoration: none;
+}
+tr{
+  text-align:center;
+}
+.viewersclass{
+  margin-right:13px;
+  float:right;
+}
+.uptimeclass{
+  margin-right:5px;
+  float:right;
+}
+.tooltip {
+  display:none;
+  position:absolute;
+  border:1px solid #333;
+  background-color:#202020;
+  border-radius:5px;
+  padding:10px;
+  color:#fff;
+  font-size:12px;
+}
+#manageFollowingDiv{
+  float: right;
+}
+#manageFollowingButton{
+  text-decoration: none;
+  color: #555;
+}
+#manageFollowingButton:hover{
+  color: #2a5db0; 
+}
+.manageFollowingMessage{
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 15px;
+  color: #2a5db0;
+}
+#followingDiv img:not(#loading2){
+  width:15px;
+  height:15px;
+}
+#followingTable{
+  width: 100%;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+#followingTable a:not(.unfollowstreamer){
+  color: #2a5db0;
+  float:left;
+}
+#followingTable a{
+  color: #CC2929;
+  text-decoration: none;
+}
+footer{
+  color: gray;
+  font-size: smaller;
+  clear: both;
+}
+#versionDiv{
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 8px;
+  font-weight: lighter;
+  font-variant: normal;
+  float: right;
+}
