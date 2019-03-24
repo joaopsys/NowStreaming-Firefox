@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="popup.js"></script>
+	<link rel="stylesheet" type="text/css" href="popup.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,500,700' rel='stylesheet' type='text/css'>
+	<script src="options.js"></script>
+	<meta charset="utf-8"/>
+</head>
+<body>
+<div id="optionsDivKappa">
+<div class="optionsTitle">Options:</div><br>
+	<input type="checkbox" id="notifications" class="checkbox"> Get Notifications
+	<br><br>
+	The <b>'Import from Twitch'</b> button will either:<br>
+		<input type="radio" name="syncoption" id="checkadd"> <b><u>Add</u></b> your Twitch list of streamers to NowStreaming.<br>
+		<input type="radio" name="syncoption" id="checkreplace"> <b><u>Replace</u></b> your NowStreaming list with your Twitch list.<br>
+		<br>
+		<a href="#" id="syncTwitchButton" class="masterTooltip fa fa-twitch fa-lg" title="This will import the streamers you follow on Twitch to NowStreaming" ><span class="importFromTwitchMessage"> Import from Twitch</span></a>
+<div id="inputTwitchUser">
+<br>
+	<input id= "syncWithTwitchInput" maxlength=26 class="inputclass" type="text" placeholder="Insert a Twitch username to import" size="10"/> <a href="#" class="fa fa-check fa-lg" id="submitButton"></a>
+</div>
+	<div id="importTwitchFailMessage"></div>
+	<div id ="unfollowAll">
+		<br><a href="#" class="masterTooltip fa fa-user-times fa-lg" id="unfollowAllButton" title="This will unfollow every user you follow on NowStreaming."><span class="unfollowAllMessage"> Unfollow All (This will NOT affect your Twitch account!)</span></a>
+	</div>
+	<br>
+	<table id="bottomButtonsTable">
+		<tr>
+			<td><a href="#" id="exportFollowingButton" class="masterTooltip fa fa-upload fa-lg" title="This will export the list of streamers you follow so that you can import it later."><span class="exportImportMessage"> Export Data</span><a></td>
+			<td><a href="#" id="importFollowingButton" class="masterTooltip fa fa-download fa-lg" title="This will import a list of streamers, exported via the 'Export Data' button."><span class="exportImportMessage"> Import Data</span></a></td>
+		</tr>
+	</table>
+	<div id="textBox">(Make sure you copy everything correctly or it won't work!)<br><br><textarea id="exportBox" type="text"></textarea></div>
+	<div id="importDiv"><br><input id="importDataInput" class="inputclass" type="text" placeholder = "Paste the exported data here!"/> <a href="#" class="fa fa-check fa-lg" id="submitData"></a></div>
+	<div id="importDataFailMessage"></div>
+	<br>
+</div>
+</body>
+</html>
