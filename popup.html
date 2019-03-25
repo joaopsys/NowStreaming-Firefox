@@ -1,88 +1,145 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<script src="jquery-3.3.1.min.js"></script>
-	<script src="popup.js"></script>
-	<link rel="stylesheet" type="text/css" href="popup.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
-	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,500,700' rel='stylesheet' type='text/css'>
-	<script src="options.js"></script>
-	<meta charset="utf-8"/>
-</head>
-<body>
-<table id="followAndOptionsTable">
-	<tr>
-		<td><a href="#" id="unfollowCurrentButton" class="fa fa-heart fa-2x"><span class="currentMessage"></span></a> <a href="#" id="followCurrentButton" class="fa fa-heart fa-2x"><span class="currentMessage"></span></a></td>
-		<td><div id="manageFollowingDiv"><span class="manageFollowingMessage">Manage following list </span><a href="#" class="fa fa-users fa-2x" id="manageFollowingButton"></a></div></td>
-	</tr>
-</table>
-<div id="streamersDiv">
-	<div id="noStreams">There are <b>no streams online.</b></b></div>
-	<div id="loadingStreams"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
-	<div id="streamersTableDiv" style="max-height:438px;overflow:auto;" >
-	<table id="streamersTable" class="pure-table pure-table-horizontal">
-		<thead>
-			<tr>
-				<th id="thfirst">Streamer</th>
-				<th id="thsecond">Game</th>
-				<th id="ththird">Viewers</th>
-				<th id="thfourth">Uptime</th>
-			</tr>
-		 </thead>
-	</table>
+	<head>
+		<script src="jquery-3.3.1.min.js"></script>
+		<script src="popup.js"></script>
+		<link rel="stylesheet" type="text/css" href="popup.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,500,700' rel='stylesheet' type='text/css'>
+		<script src="options.js"></script>
+		<meta charset="utf-8"/>
+	</head>
+	<body>
+
+	<div class="tabs">
+		<div class="tab selected-tab" id="toggleStreamers">
+			<i class="tab-icon fa fa-users"></i>Stream List
+		</div>
+		<div class="tab" id="toggleOptions">
+			<i class="tab-icon fas fa-cog"></i>Options
+		</div>
+		<div class="heart unfollow-button" id="unfollowCurrentButton">
+			<i class="fas fa-heart-broken"></i>
+		</div>
+		<div class="heart follow-button" id="followCurrentButton">
+			<i class="fa fa-heart"></i>
+		</div>
 	</div>
-</div>
-<br>
-<div id="fastFollow">
-	<input id ="fastFollowInput" maxlength=26 class="inputclass" type="text" placeholder="Insert a Twitch stream to start following it" size="10"/>&nbsp;&nbsp;<a href="#" id="submitFastFollow" class="fa fa-check fa-lg"></a>
-</div>
-<div id="fastFollowMessage"></div>
-<br>
-	<div id="noFollowing">You're not following any streamer.<br><br>To start using NowStreaming, you can either: 
+
+	<div class="streamersDiv" id="streamersDiv">
+		<div class="noStreams" id="noStreams">There are <b>no streams online.</b></b></div>
+		<!-- <div class="loadingStreams" id="loadingStreams"><i class="fa fa-spinner fa-spin fa-5x"></i></div> -->
+		<div class="streamersTableDiv" id="streamersTableDiv">
+		<table class="streamersTable pure-table pure-table-horizontal" id="streamersTable">
+			<thead>
+				<tr>
+					<th id="thfirst">Streamer</th>
+					<th id="thsecond">Game</th>
+					<th id="ththird">Viewers</th>
+					<th id="thfourth">Uptime</th>
+				</tr>
+			</thead>
+		</table>
+		</div>
+	</div>
+	
+	<div class="fastFollow" id="fastFollow">
+		<input
+			id="fastFollowInput"
+			maxlength=26
+			class="inputclass"
+			type="text"
+			placeholder="Insert a Twitch streamer name to follow it"
+			size="10"/>
+		<i id="submitFastFollow" class="fa fa-check fa-lg"></i>
+	</div>
+
+	<div class="fast-follow-message" id="fastFollowMessage"></div>
+	
+	<div class="no-following" id="noFollowing">
+		<div class="no-following-instructions">You're not following any streamer.</div>
+		<div class="no-following-instructions">To start using NowStreaming, you can either:</div>
 		<ul>
 			<li>Start following a streamer by using the <b>text field</b> above.</li><br>
 			<li>Click the <b>Import from Twitch</b> button in the <b>Options Menu</b> to import your Twitch following list.</li><br>
 			<li>Click the <b>Import Data</b> button in the <b>Options Menu</b> to directly import data, if you have exported it previously.</li>
 		</ul>
 	</div>
-<div id ="toggleoptionsdiv"><a href="#" id="toggleOptions" title="Toggle the options menu" class="masterTooltip fa fa-gear fa-2x"><span class="currentMessageOptions"> Show Options</span></a></div>
-<br>
-<div id="optionsDiv">
-<div class="optionsTitle">Options:</div><br>
-	<input type="checkbox" id="notifications" class="checkbox"> Enable Notifications
-	<br><br>
-	The <b>'Import from Twitch'</b> button will either:<br>
-		<input type="radio" name="syncoption" id="checkadd"> <b><u>Add</u></b> your Twitch list of streamers to NowStreaming.<br>
-		<input type="radio" name="syncoption" id="checkreplace"> <b><u>Replace</u></b> your NowStreaming list with your Twitch list.<br>
-		<br>
-		<a href="#" id="syncTwitchButton" class="masterTooltip fa fa-twitch fa-lg" title="This will import the streamers you follow on Twitch to NowStreaming" ><span class="importFromTwitchMessage"> Import from Twitch</span></a>
-<div id="inputTwitchUser">
-<br>
-	<input id= "syncWithTwitchInput" maxlength=26 class="inputclass" type="text" placeholder="Insert a Twitch username to import" size="10"/> <a href="#" class="fa fa-check fa-lg" id="submitButton"></a><i class="importTwitchLoading fa fa-spinner fa-spin fa-lg"></i>
-</div>
-	<div id="importTwitchFailMessage"></div>
-	<div id ="unfollowAll">
-		<br><a href="#" class="masterTooltip fa fa-user-times fa-lg" id="unfollowAllButton" title="This will unfollow every user you follow on NowStreaming."><span class="unfollowAllMessage"> Unfollow All (Will NOT affect your Twitch account!)</span></a>
+	
+	<div class="optionsDiv" id="optionsDiv">
+		<div class="management-area">
+			<div class="notifications">
+				<input type="checkbox" id="notifications" class="checkbox">
+				<label for="notifications">Enable Notifications</label>
+			</div>
+			<div class="follow-list" id="manageFollowingButton">
+				<i class="fa fa-users"></i>
+				<div>Manage following list</div>
+			</div>
+		</div>
+		
+		<div class="import-twitch">
+			<div class="imports-inputs">
+				<input id="syncWithTwitchInput" maxlength=26 class="inputclass" type="text" placeholder="Insert a Twitch name to import its follow list" size="10"/>
+				<button class="masterTooltip" id="submitButton" title="This will import the selected Twitch channel's follow list to NowStreaming.">
+					<div class="fab fa-twitch fa-lg"></div>
+					Import from Twitch
+				</button>
+				<i class="importTwitchLoading fa fa-spinner fa-spin fa-lg"></i>
+				<div class="batch-import-failed" id="importTwitchFailMessage"></div>
+			</div>
+			
+			<div class="import-description">
+				<div>The <b>'Import from Twitch'</b> button will either:</div>
+				<div class="text-block">
+					<input type="radio" name="syncoption" id="checkadd">
+					<div><b><u>Add</u></b> your Twitch list of streamers to NowStreaming.</div>
+				</div>
+				<div class="text-block">
+					<input type="radio" name="syncoption" id="checkreplace">
+					<div><b><u>Replace</u></b> your NowStreaming list with your Twitch list.</div>
+				</div>
+			</div>
+			
+		</div>
+
+		<div class="masterTooltip unfollow-all unfollowAllMessage" id="unfollowAll" title="This will unfollow every user you follow on NowStreaming.">
+			<i class="fa fa-user-times fa-lg"></i>
+			<div>Unfollow All</div>
+			<div class="small-text">(Will <b>NOT</b> affect your Twitch account!)</div>
+		</div>
+		
+		<div class="export-import">
+			<div class="masterTooltip export" id="exportFollowingButton" title="This will export the list of streamers you follow so that you can import it later.">
+				<i class="fa fa-upload fa-lg"></i>
+				<div>Export Data</div>
+			</div>
+			<div class="masterTooltip import" id="importFollowingButton" title="This will import a list of streamers, exported via the 'Export Data' option.">
+				<i class="fa fa-download fa-lg"></i>
+				<div>Import data</div>
+			</div>
+		</div>
+		
+		<div class="text-box" id="textBox">
+			<div class="instructions">(Make sure you copy everything correctly or it won't work!)</div>
+			<textarea id="exportBox" type="text"></textarea>
+		</div>
+
+		<div class="import-div" id="importDiv">
+			<input id="importDataInput" class="inputclass" type="text" placeholder = "Paste the exported data here!"/>
+			<i class="fa fa-check fa-lg" id="submitData"></i>
+		</div>
+		
+		<div class="import-failed" id="importDataFailMessage"></div>
+
 	</div>
-	<br>
-	<table id="bottomButtonsTable">
-		<tr>
-			<td><a href="#" id="exportFollowingButton" class="masterTooltip fa fa-upload fa-lg" title="This will export the list of streamers you follow so that you can import it later."><span class="exportImportMessage"> Export Data</span><a></td>
-			<td><a href="#" id="importFollowingButton" class="masterTooltip fa fa-download fa-lg" title="This will import a list of streamers, exported via the 'Export Data' button."><span class="exportImportMessage"> Import Data</span></a></td>
-		</tr>
-	</table>
-	<div id="textBox">(Make sure you copy everything correctly or it won't work!)<br><br><textarea id="exportBox" type="text"></textarea></div>
-	<div id="importDiv"><br><input id="importDataInput" class="inputclass" type="text" placeholder = "Paste the exported data here!"/> <a href="#" class="fa fa-check fa-lg" id="submitData"></a></div>
-	<div id="importDataFailMessage"></div>
-	<br>
-</div>
-</body>
-<footer>
-	All game icons (if applicable) belong to their respective companies/owners.
-	<br>
-	Feel free to <a target="_blank" href="https://www.paypal.me/joaopsys">Donate</a> if you like this extension. Or don't, I know you're not reading this.
-	<br>
-	<div id="versionDiv">V. </div>
-</footer>
+	</body>
+	<footer>
+		All game icons (if applicable) belong to their respective companies/owners.
+		<br>
+		Feel free to <a target="_blank" href="https://www.paypal.me/joaopsys">Donate</a> if you like this extension. Or don't, I know you're not reading this.
+		<br>
+		<div id="versionDiv">V. </div>
+	</footer>
 </html>

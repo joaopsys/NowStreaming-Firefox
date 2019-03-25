@@ -265,8 +265,9 @@ function updateCore(is_first_run,callback) {
 					}
 				}
 				browser.storage.local.set({'streamers': streamers}, function () {
-					browser.browserAction.setBadgeBackgroundColor({"color": (onlineStreams==0?"#B80000":"#009933")});
+					browser.browserAction.setBadgeBackgroundColor({"color": (onlineStreams==0?"#B80000":"#666161")});
 					browser.browserAction.setBadgeText({"text": ""+onlineStreams});
+					browser.browserAction.setBadgeTextColor({"color": '#FFFFFF'});
 				callback();
 				});
 			});
