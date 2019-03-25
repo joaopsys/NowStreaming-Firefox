@@ -8,12 +8,11 @@ $(document).ready(function () {
 	$("#streamersTableDiv").hide();
 	$("#loadingFollowing").show();
 	$("#loadingStreams").show();
-	$("#inputTwitchUser").hide();
 	$("#unfollowAll").show();
 	$("#textBox").hide();
 	$("#importDiv").hide();
 	$("#fastFollowMessage").hide();
-	$(".importTwitchLoading").hide();
+	$("#importTwitchLoading").hide();
 	$("#importDataFailMessage").hide();
 	$("#importTwitchFailMessage").hide();
 	$(".currentMessage").hide();
@@ -34,18 +33,36 @@ $(document).ready(function () {
 		click: function(){
 			if ($("#optionsDiv").css('display') == 'none'){
 				$("#optionsDiv").show();
-				$(".currentMessageOptions").html(" Hide Options");
+				$("#toggleOptions").addClass("selected-tab");
+				$("#streamersDiv").hide();
+				$("#fastFollow").hide();
+				$("#noFollowing").hide();
+				$("#fastFollowMessage").hide();
+				$("#toggleStreamers").removeClass("selected-tab");
 			}
-			else{
+		}
+	});
+	$("#toggleStreamers").on({
+		click: function(){
+			if ($("#streamersDiv").css('display') == 'none'){
+				$("#streamersDiv").show();
+				$("#fastFollow").show();
+				$("#toggleStreamers").addClass("selected-tab");
 				$("#optionsDiv").hide();
-				$(".currentMessageOptions").html(" Show Options");
+				$("#toggleOptions").removeClass("selected-tab");
+
+				if(nfollowing <= 0) {
+					$("#noFollowing").show();
+				}
+				if(nstreams <= 0 && nfollowing > 0) {
+					$("#noStreams").show();
+				}
 			}
 		}
 	});
 	$("#followingTable").hide();
 
 	//$("#forceUpdate").bind("click", onForceUpdate);
-	$("#syncTwitchButton").bind("click", showTwitchForm);
 	$("#submitButton").bind("click", function(){
 		browser.storage.local.get({
 			add: true
@@ -53,7 +70,7 @@ $(document).ready(function () {
 			syncWithTwitch(50,0,null,items.add);
 		});
 	});
-	$("#unfollowAllButton").bind("click", unfollowAll);
+	$("#unfollowAll").bind("click", unfollowAll);
 	$("#exportFollowingButton").bind("click", exportFollowing);
 	$("#importFollowingButton").bind("click",importFollowing);
 	$("#submitData").bind("click", importData);
@@ -82,9 +99,9 @@ $(document).ready(function () {
 				$("#streamersTableDiv").show();
 				$("#streamersTable").show();
 				if (nstreams % 2 == 0)
-					$("#streamersTable").append("<tr id=\"row"+key+"\"><td nowrap><a href=\"#\" title=\"Popout this stream\" class=\"masterTooltip popout fa fa-share-square-o fa-lg\"></a><a title=\""+(streamers[key].title==null?"?":streamers[key].title=="null"?"?":streamers[key].title)+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td><td><img src=\""+loadIcon(streamers[key].game)+"\" title=\""+streamers[key].game+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key].viewers+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key].created_at)+"</span></td></tr>");
+					$("#streamersTable").append("<tr class=\" list-row\" id=\"row"+key+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key].title==null?"?":streamers[key].title=="null"?"?":streamers[key].title)+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td><td><img src=\""+loadIcon(streamers[key].game)+"\" title=\""+streamers[key].game+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key].viewers+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key].created_at)+"</span></td></tr>");
 				else
-					$("#streamersTable").append("<tr class=\"pure-table-odd\" id=\"row"+key+"\"><td nowrap><a href=\"#\" title=\"Popout this stream\" class=\"masterTooltip popout fa fa-share-square-o fa-lg\"></a><a title=\""+(streamers[key].title==null?"?":streamers[key].title=="null"?"?":streamers[key].title)+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td><td><img src=\""+loadIcon(streamers[key].game)+"\" title=\""+streamers[key].game+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key].viewers+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key].created_at)+"</span></td></tr>");
+					$("#streamersTable").append("<tr class=\" list-row pure-table-odd\" id=\"row"+key+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key].title==null?"?":streamers[key].title=="null"?"?":streamers[key].title)+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td><td><img src=\""+loadIcon(streamers[key].game)+"\" title=\""+streamers[key].game+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key].viewers+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key].created_at)+"</span></td></tr>");
 
 			}
 		}
@@ -111,6 +128,7 @@ $(document).ready(function () {
 			$("#noStreams").show();
 			$("#streamersTableDiv").hide();
 			$("#streamersTable").hide();
+			$("#streamersDiv").hide();
 		}
 
 		browser.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
@@ -175,7 +193,14 @@ function showTooltip(e){
 	.appendTo('body')
 	.fadeIn('slow');
 	var mousex = e.pageX - 20; //Get X coordinates
-	var mousey = e.pageY - 50 - $('.tooltip').height(); //Get Y coordinates
+
+	// if(e.pageY < 70) {
+		// var mousey = e.pageY + $('.tooltip').height(); //Get Y coordinates
+		var mousey = 0;
+	// }
+	// else {
+	// 	var mousey = e.pageY - 50 - $('.tooltip').height(); //Get Y coordinates
+	// }
 	$('.tooltip')
 	.css({ top: mousey, left: mousex })
 }
@@ -264,10 +289,6 @@ function fastFollow(){
 	});
 }
 
-function showTwitchForm(){
-	$("#inputTwitchUser").show();
-}
-
 function syncWithTwitch(limit, offset, storage, add){
 	var user = document.getElementById("syncWithTwitchInput").value;
 	user = user.toLowerCase();
@@ -290,8 +311,7 @@ function syncWithTwitch(limit, offset, storage, add){
 			var userID = getUserID(result)
 			if (userID > 0) {
 				twitchAPICall(1, userID, limit, offset).done(function (json) {
-					$(".importTwitchLoading").show();
-					$("#submitButton").hide();
+					$("#importTwitchLoading").show();
 					if (json.follows.length == 0) {
 						browser.storage.local.set({'streamers': storage.streamers}, function () {
 							onForceUpdate();
@@ -324,15 +344,36 @@ function syncWithTwitch(limit, offset, storage, add){
 }
 
 function exportFollowing(){
-	browser.storage.local.get({streamers:{}}, function (result) {
-		$("#textBox").show();
-		var streamers = result.streamers;
-		$("#exportBox").val(JSON.stringify(streamers));
-	});
+	if($("#textBox").css('display') == 'none') {
+		browser.storage.local.get({streamers:{}}, function (result) {
+			$("#textBox").show();
+			var streamers = result.streamers;
+			$("#exportBox").val(JSON.stringify(streamers));
+		});
+
+		if($("#importDiv").css('display') != 'none') {
+			$("#importDiv").hide();
+			$("#importDataFailMessage").hide();
+		}
+	}
+	else {
+		$("#textBox").hide();
+	}
+	
 }
 
 function importFollowing(){
-	$("#importDiv").show();
+	if($("#importDiv").css('display') == 'none') {
+		$("#importDiv").show();
+
+		if($("#textBox").css('display') != 'none') {
+			$("#textBox").hide();
+		}
+	}
+	else {
+		$("#importDiv").hide();
+		$("#importDataFailMessage").hide();
+	}
 }
 
 function importData(){
@@ -379,6 +420,7 @@ function loadIcon(game) {
 function onForceUpdate(){
 	browser.runtime.getBackgroundPage(function(backgroundPage) {
 		backgroundPage.updateCore(1,function(){location.reload();});
+		nfollowing = 0;
 		//location.reload();
 	});
 }

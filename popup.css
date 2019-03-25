@@ -2,20 +2,19 @@
     font-family: 'NS-Thead';
     src: url('ADAM.CG PRO.otf');
 }
-body {
-    font-family: 'Ubuntu', sans-serif;
-    font-weight: 400;
-    background-color: #F8F8F8;
-    height:170px;
-    width:400px;
-    font-size: 75%;
+
+.tooltip {
+  display:none;
+  position:absolute;
+  border:1px solid #333;
+  background-color:#202020;
+  border-radius:5px;
+  padding:10px;
+  color:#fff;
+  font-size:12px;
 }
-footer{
-  color: gray;
-  font-size: smaller;
-  clear: both;
-  text-align: center;
-}
+
+
 input, textarea{
   background-color: white;
 }
@@ -63,209 +62,329 @@ textarea[type="text"].focus {
 #loadingFollowing{
   text-align: center!important;
 }
-#followAndOptionsTable{
-  width:100%;
-}
-#noStreams{
-  text-align: center!important;
-}
-#followCurrentButton,
-#unfollowCurrentButton{
-  float:left;
-  text-decoration: none;
-  color:#555;
-}
-#unfollowCurrentButton:hover{
-  color: #CC2929; 
-}
-#followCurrentButton:hover{
-  color: #29CC29; 
-}
-.currentMessageOptions,
-.currentMessage{
+
+
+body {
+  display: grid;
+  grid-template-rows: repeat(5, min-content);
+  width: 400px;
+  overflow: hidden;
   font-family: 'Ubuntu', sans-serif;
-  font-size: 15px;
-}
-#toggleoptionsdiv{
-  text-align: center!important;
-}
-#toggleOptions{
+  font-weight: 400;
+  font-size: 75%;
   text-decoration: none;
-  color: #555;
+  background-color: #F8F8F8;
 }
-#toggleOptions:hover{
+
+
+body .tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr min-content min-content;
+  align-items: baseline;
+}
+body .tabs .tab {
+  display: block;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border: 1px solid black;
+  text-align: center;
+  align-self: center;
+  padding: 7px 0px 4px;
+  font-weight: bold;
+  background-color: #ebebe0;
+}
+body .tabs .selected-tab{
+  background-color: #F8F8F8;
+  border-bottom: none;
   color: #2a5db0;
 }
-#optionsDiv{
-  font-size: 13px;
-  color: #000;
+body .tabs :hover {
+  cursor: pointer;
 }
-.optionsTitle{
-  text-align: center!important;
-  font-family: "NS-Thead";
-  font-weight: bold;
-  font-size: 15px;
+body .tabs .tab .tab-icon {
+  font-size: 100%;
+  padding-right: 4px;
 }
-#importFollowingButton{
-  float: right;
+body .tabs .heart {
+  border-bottom: 1px solid black;
+  padding: 4px;
+  font-size: 125%;
 }
-#exportFollowingButton,
-#importFollowingButton{
-  float:left;
-  text-decoration: none;
-  color:#555;
-}
-#importDiv,
-#textBox{
-  text-align: center!important;
-}
-#exportBox{
-    height:200px;
-    width:300px;
-}
-#syncTwitchButton{
-  text-decoration: none;
-  color: #555;
-}
-#syncTwitchButton:hover{
-  color: #6441a5;
-}
-#unfollowAllButton:hover{
+body .tabs .unfollow-button:hover {
   color: #CC2929;
 }
-#exportFollowingButton:hover,
-#importFollowingButton:hover{
-  color: #2a5db0; 
-}
-#submitButton,
-#unfollowAllButton,
-#submitData{
-  text-decoration: none;
-  color: #555;
-}
-#submitButton:hover,
-#submitData:hover{
-  color: #29CC29; 
-}
-.importFromTwitchMessage,
-.unfollowAllMessage,
-.exportImportMessage{
-  font-family: 'Ubuntu', sans-serif;
-  font-size: 15px;
-}
-#bottomButtonsTable,
-#streamersTable{
-  width:100%;
-  font-size: 12px;
-}
-#fastFollow a{
-  text-decoration: none;
-}
-#submitFastFollow{
-  color: #555; 
-}
-#submitFastFollow:hover{
+body .tabs .follow-button:hover {
   color: #29CC29;
 }
-#importTwitchFailMessage,
-#importDataFailMessage,
-#fastFollowMessage{
+
+
+body .streamersDiv {
+  display: block;
+  overflow: auto;
+  min-height: 150px;
+  max-height: 380px;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  
+}
+body .streamersDiv .noStreams {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  align-content: center;
   text-align: center;
 }
-#streamersTable img:not(#loading1):not(.popout img){
-  width:20px;
-  height:20px;
+body .streamersDiv .loadingStreams {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  align-content: center;
+  text-align: center;
 }
-#streamersTable{
-  text-transform: capitalize;
-  color: #555;
+body .streamersDiv .streamersTableDiv .streamersTable {
+  overflow:auto;
+  max-height:450px;
+  width: 100%;
+}
+body .streamersDiv .streamersTableDiv .streamersTable thead{
+  text-transform: uppercase;
+  font-size: 12px;
   font-weight: 500;
 }
-#followingDiv thead,
-#streamersDiv thead{
-  font-family: "NS-Thead";
-}
-#streamersTable img:not(#loading1){
-  width:25px;
-  height:25px;
-}
-#thfirst{
-  text-align: left;
-}
-#streamersDiv a:not(.popout) {
-  color: #2a5db0;
-  float:left;
-}
-.popout {
-  float:left;
-  margin-right: 6px;
-}
-#streamersDiv a{
-  color: #555;
-  text-decoration: none;
-}
-tr{
-  text-align:center;
-}
-.viewersclass{
-  margin-right:13px;
-  float:right;
-}
-.uptimeclass{
-  margin-right:5px;
-  float:right;
-}
-.tooltip {
-  display:none;
-  position:absolute;
-  border:1px solid #333;
-  background-color:#202020;
-  border-radius:5px;
-  padding:10px;
-  color:#fff;
-  font-size:12px;
-}
-#manageFollowingDiv{
-  float: right;
-}
-#manageFollowingButton{
-  text-decoration: none;
-  color: #555;
-}
-#manageFollowingButton:hover{
-  color: #2a5db0; 
-}
-.manageFollowingMessage{
-  font-family: 'Ubuntu', sans-serif;
-  font-size: 15px;
-  color: #2a5db0;
-}
-#followingDiv img:not(#loading2){
-  width:15px;
-  height:15px;
-}
-#followingTable{
-  width: 100%;
+body .streamersDiv .streamersTableDiv .streamersTable tbody .list-row {
   text-transform: capitalize;
-  font-weight: bold;
-}
-#followingTable a:not(.unfollowstreamer){
-  color: #2a5db0;
-  float:left;
-}
-#followingTable a{
-  color: #CC2929;
   text-decoration: none;
 }
+body .streamersDiv .streamersTableDiv .streamersTable tbody .list-row i {
+  padding-right: 8px;
+  color: #555;
+}
+body .streamersDiv .streamersTableDiv .streamersTable tbody .list-row i:hover {
+  cursor: pointer;
+}
+body .streamersDiv .streamersTableDiv .streamersTable tbody .list-row a {
+  color: #2a5db0;
+  text-decoration: none;
+}
+
+
+
+body .fastFollow {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-gap: 16px;
+  justify-content: center;
+  padding: 16px;
+  text-decoration: none;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+body .fastFollow input {
+  width: 230px;
+}
+body .fastFollow input::placeholder {
+  font-style: italic;
+}
+body .fastFollow i {
+  line-height: 20px;
+}
+body .fastFollow i:hover {
+  color: #29CC29;
+  cursor: pointer;
+}
+
+body .fast-follow-message {
+  display: flex;
+  justify-content: center;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  padding-bottom: 8px;
+}
+
+.no-following {
+  display: grid;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+.no-following .no-following-instructions {
+  padding-left: 40px;
+}
+
+.optionsDiv {
+  display: grid;
+  padding: 16px;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+.optionsDiv .management-area {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding-bottom: 8px;
+}
+.optionsDiv .management-area .notifications{
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-gap: 8px;
+  padding-bottom: 8px;
+  align-content: center;
+  justify-self: center;
+}
+.optionsDiv .management-area .follow-list{
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-gap: 8px;
+  justify-self: center;
+}
+.optionsDiv .management-area .follow-list:hover{
+  cursor: pointer;
+  color: #2a5db0;
+}
+.optionsDiv .import-twitch {
+  display: grid;
+  grid-gap: 8px;
+  padding: 8px;
+  border: 1px solid grey;
+  border-radius: 8px;
+}
+.optionsDiv .import-twitch .imports-inputs {
+  display: grid;
+  grid-auto-flow: row;
+  grid-gap: 8px;
+}
+.optionsDiv .import-twitch .imports-inputs .batch-import-failed {
+  display: flex;
+  justify-content: center;
+}
+.optionsDiv .import-twitch .imports-inputs input {
+  display: flex;
+  width: 80%;
+  justify-self: center;
+}
+.optionsDiv .import-twitch .imports-inputs i {
+  display: flex;
+  justify-content: center;
+}
+.optionsDiv .import-twitch .imports-inputs input::placeholder {
+  font-style: italic;
+}
+.optionsDiv .import-twitch .imports-inputs button{
+  justify-self: center;
+  height: 35px;
+  width: 150px;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: transparent;
+}
+.optionsDiv .import-twitch button:hover{
+  color: #6441a5;
+}
+.optionsDiv .import-twitch .inportTwitchUser {
+  display: grid;
+  grid-auto-columns: min-content;
+}
+
+.optionsDiv .import-description {
+  display: block;
+  justify-content: center;
+  padding-top: 8px;
+  border-top: 1px dashed grey;
+}
+.optionsDiv .import-description .text-block {
+  display: flex;
+  padding: 8px 0px 0px 35px;
+  justify-content: left;
+}
+
+.optionsDiv .unfollow-all {
+  display: grid;
+  grid-template-columns: repeat(3, min-content);
+  grid-gap: 4px;
+  padding-top: 16px;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 16px;
+}
+.optionsDiv .unfollow-all:hover {
+  color: #CC2929;
+  cursor: pointer;
+}
+.optionsDiv .unfollow-all div {
+  display: flex;
+  align-self: center;
+}
+.optionsDiv .unfollow-all div b {
+  padding: 0px 4px;
+}
+.optionsDiv .unfollow-all .small-text {
+  font-size: 10px;
+}
+
+.optionsDiv .export-import {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  font-size: 16px;
+  white-space: nowrap;
+  padding-top: 16px;
+}
+.optionsDiv .export-import div:hover {
+  cursor: pointer;
+  color: #2a5db0;
+}
+.optionsDiv .export-import i {
+  padding-right: 8px;
+}
+.optionsDiv .export-import .export {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.optionsDiv .export-import .import {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.optionsDiv .text-box {
+  display: flex;
+  flex-direction: column;
+}
+.optionsDiv .text-box .instructions {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0px;
+}
+.optionsDiv .text-box textarea {
+  height: 150px;
+  width: 100%;
+}
+.optionsDiv .import-div {
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: 8px;
+  padding: 16px 0px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.optionsDiv .import-div i:hover {
+  cursor: pointer;
+  color: #29CC29;
+}
+
+.optionsDiv .import-failed {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+
 footer{
+  border: 1px solid black;
+  border-top: none;
+  padding: 0px 8px 8px;
   color: gray;
   font-size: smaller;
   clear: both;
-}
-#versionDiv{
-  font-family: 'Ubuntu', sans-serif;
-  font-size: 8px;
-  font-weight: lighter;
-  font-variant: normal;
-  float: right;
+  text-align: center;
 }
