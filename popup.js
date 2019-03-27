@@ -1,4 +1,7 @@
 $(document).ready(function () {
+	var nfollowing=0;
+	var nstreams=0;
+
 	$("#optionsDiv").hide();
 	$("#followCurrentButton").hide();
 	$("#unfollowCurrentButton").hide();
@@ -45,7 +48,6 @@ $(document).ready(function () {
 	$("#toggleStreamers").on({
 		click: function(){
 			if ($("#streamersDiv").css('display') == 'none'){
-				$("#streamersDiv").show();
 				$("#fastFollow").show();
 				$("#toggleStreamers").addClass("selected-tab");
 				$("#optionsDiv").hide();
@@ -56,6 +58,10 @@ $(document).ready(function () {
 				}
 				if(nstreams <= 0 && nfollowing > 0) {
 					$("#noStreams").show();
+					$("#streamersDiv").show();
+				}
+				if(nstreams > 0) {
+					$("#streamersDiv").show();
 				}
 			}
 		}
@@ -81,8 +87,8 @@ $(document).ready(function () {
 	browser.storage.local.get({streamers:{}}, function (result) {
 		streamers = result.streamers;
 		var defaultpage = "https://twitch.tv/";
-		var nfollowing=0;
-		var nstreams=0;
+		nfollowing=0;
+		nstreams=0;
 		$("#streamersTable").append("<tbody>");
 
 		for (var key in streamers){
@@ -122,13 +128,18 @@ $(document).ready(function () {
 			$("#noFollowing").show();
 			$("#unfollowAll").hide();
 			$("#manageFollowingButton").hide();
+			$("#streamersDiv").hide();
 		}
 
-		if (nstreams <= 0){
+		if (nstreams <= 0 && nfollowing > 0){
 			$("#noStreams").show();
 			$("#streamersTableDiv").hide();
 			$("#streamersTable").hide();
-			$("#streamersDiv").hide();
+			$("#streamersDiv").show();
+		}
+
+		if (nstreams > 0) {
+			$("#streamersDiv").show();
 		}
 
 		browser.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
@@ -287,6 +298,7 @@ function fastFollow(){
 			$("#fastFollowMessage").show();
 		}
 	});
+	document.getElementById("fastFollowInput").value = '';
 }
 
 function syncWithTwitch(limit, offset, storage, add){
@@ -316,6 +328,7 @@ function syncWithTwitch(limit, offset, storage, add){
 						browser.storage.local.set({'streamers': storage.streamers}, function () {
 							onForceUpdate();
 						});
+						document.getElementById("syncWithTwitchInput").value = '';
 					}
 					else {
 						for (var i = 0; i < json.follows.length; i++) {
@@ -338,6 +351,7 @@ function syncWithTwitch(limit, offset, storage, add){
 				$("#importTwitchFailMessage").css("font-weight","bold");
 				$("#importTwitchFailMessage").css("color","red");
 				$("#importTwitchFailMessage").show();
+				document.getElementById("syncWithTwitchInput").value = '';
 			}
 		});
 	}
@@ -399,6 +413,7 @@ function importData(){
 		$("#importDataFailMessage").css("color","red");
 		$("#importDataFailMessage").show();
 	}
+	document.getElementById("importDataInput").value = '';
 }
 
 function unfollowAll(){
@@ -420,7 +435,6 @@ function loadIcon(game) {
 function onForceUpdate(){
 	browser.runtime.getBackgroundPage(function(backgroundPage) {
 		backgroundPage.updateCore(1,function(){location.reload();});
-		nfollowing = 0;
 		//location.reload();
 	});
 }
