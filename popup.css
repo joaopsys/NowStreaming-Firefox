@@ -210,6 +210,20 @@ body .fast-follow-message {
   padding-left: 40px;
 }
 
+#followingTable{
+  width: 100%;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+#followingTable a:not(.unfollowstreamer){
+  color: #2a5db0;
+  float:left;
+}
+#followingTable a{
+  color: #CC2929;
+  text-decoration: none;
+}
+
 .optionsDiv {
   display: grid;
   padding: 16px;
