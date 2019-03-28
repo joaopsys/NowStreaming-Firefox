@@ -175,9 +175,9 @@ function updateTable() {
 			nfollowing++;
 			$("#followingTable").show();
 			if (nfollowing%2==0)
-				$("#followingTable").append("<tr id=\""+key+"\"><td><a class=\"streamerpage\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:#29CC29\">Online</span></td>":"<td><span style=\"color:#CC2929\">Offline</span></td>")+"<td><a title=\"Unfollow "+key+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
+				$("#followingTable").append("<tr id=\""+key+"\"><td><a class=\"streamerpage\" href=\""+sanitize(streamers[key].url, defaultpage+key)+"\" target=\"_blank\">"+sanitize(key)+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:#29CC29\">Online</span></td>":"<td><span style=\"color:#CC2929\">Offline</span></td>")+"<td><a title=\"Unfollow "+sanitize(key)+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
 			else
-				$("#followingTable").append("<tr class=\"pure-table-odd\" id=\""+key+"\"><td><a class=\"streamerpage\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:#29CC29\">Online</span></td>":"<td><span style=\"color:#CC2929\">Offline</span></td>")+"<td><a title=\"Unfollow "+key+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
+				$("#followingTable").append("<tr class=\"pure-table-odd\" id=\""+key+"\"><td><a class=\"streamerpage\" href=\""+sanitize(streamers[key].url, defaultpage+key)+"\" target=\"_blank\">"+sanitize(key)+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:#29CC29\">Online</span></td>":"<td><span style=\"color:#CC2929\">Offline</span></td>")+"<td><a title=\"Unfollow "+sanitize(key)+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
 			$("#unfollow-"+key+"").bind("click", {name: key, remove: 1}, followCurrent);
 			$("#notifications-"+key+"").bind("click", {name: key}, check_single_notifications);
 		}
@@ -190,9 +190,9 @@ function updateTable() {
 				$("#streamersTableDiv").show();
 				$("#streamersTable").show();
 				if (nstreams % 2 == 0)
-					$("#streamersTable").append("<tr class=\" list-row\" id=\"row"+streamers[key][0]+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key][1]["title"]==null?"?":streamers[key][1]["title"]=="null"?"?":streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key][1]["url"]==null?(defaultpage+key):streamers[key][1]["url"]=="null"?(defaultpage+key):streamers[key][1]["url"])+"\" target=\"_blank\">"+streamers[key][0]+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+streamers[key][1]["game"]+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
+					$("#streamersTable").append("<tr class=\" list-row\" id=\"row"+sanitize(streamers[key][0])+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+sanitize(streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+sanitize(streamers[key][1]["url"], defaultpage+key)+"\" target=\"_blank\">"+sanitize(streamers[key][0])+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+sanitize(streamers[key][1]["game"])+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
 				else
-					$("#streamersTable").append("<tr class=\" list-row pure-table-odd\" id=\"row"+streamers[key][0]+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key][1]["title"]==null?"?":streamers[key][1]["title"]=="null"?"?":streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key][1]["url"]==null?(defaultpage+key):streamers[key][1]["url"]=="null"?(defaultpage+key):streamers[key][1]["url"])+"\" target=\"_blank\">"+streamers[key][0]+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+streamers[key][1]["game"]+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
+					$("#streamersTable").append("<tr class=\" list-row pure-table-odd\" id=\"row"+sanitize(streamers[key][0])+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+sanitize(streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+sanitize(streamers[key][1]["url"], defaultpage+key)+"\" target=\"_blank\">"+sanitize(streamers[key][0])+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+sanitize(streamers[key][1]["game"])+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
 
 			}
 		}
@@ -608,6 +608,13 @@ function twitchAPICall(type, channel, limit, offset){
 		dataType: "json",
 		type: 'GET'
 	});
+}
+
+function sanitize(string, defaultreturn="?"){
+	if (string == null || string == "null" || string == "")
+		return defaultreturn;
+	sanitized = string.replace('>','&gt;').replace('<','&lt;').replace(/\"/g,'&quot;');
+	return sanitized;
 }
 
 function getUserID(result){
