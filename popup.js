@@ -1,8 +1,10 @@
 $(document).ready(function () {
+	var selectedSort=2; // 0 = streamer, 1 = game, 2 = viewers, 3 = uptime
 	var nfollowing=0;
 	var nstreams=0;
 
 	$("#optionsDiv").hide();
+	$('#heart-div').hide();
 	$("#followCurrentButton").hide();
 	$("#unfollowCurrentButton").hide();
 	$("#noFollowing").hide();
@@ -30,6 +32,30 @@ $(document).ready(function () {
 		click: function(){
 			window.open("following.html");
 			return false;
+		}
+	});
+	$("#thfirst").on({
+		click: function(){
+			selectedSort=0;
+			onForceUpdate();
+		}
+	});
+	$("#thsecond").on({
+		click: function(){
+			selectedSort=1;
+			onForceUpdate();
+		}
+	});
+	$("#ththird").on({
+		click: function(){
+			selectedSort=2;
+			onForceUpdate();
+		}
+	});
+	$("#thfourth").on({
+		click: function(){
+			selectedSort=3;
+			onForceUpdate();
 		}
 	});
 	$("#toggleOptions").on({
@@ -84,50 +110,58 @@ $(document).ready(function () {
 
 	$("#versionDiv").append(browser.runtime.getManifest().version);
 
+	
 	browser.storage.local.get({streamers:{}}, function (result) {
 		streamersDict = result.streamers;
 		// Creating an array based on the dictionary list for it to be sorted
 		streamersArray = Object.keys(streamersDict).map(function(key) {
 			return [key, streamersDict[key]];
 		});
-
+	
 		// Sort functions
-
-		// Sort by viewers
-		/*streamersArray.sort(function(first, second) {
-			return second[1]["viewers"] - first[1]["viewers"];
-		});*/
-
-		// Sort by streamer name
-                /*streamersArray.sort(function(first, second) {
-			if (first[0] < second[0])
-				return -1;
-			else
-				return 1;
-                });*/
-
-		// Sort by Game
-                /*streamersArray.sort(function(first, second) {
-                        if (first[1]["game"] < second[1]["game"])
-                                return -1;
-                        else
-                                return 1;
-                });*/
-
-		// Sort by uptime
-                streamersArray.sort(function(first, second) {
-			if (first[1]["created_at"] == "null")
-				firstDate = new Date (1970,01);
-			else
-				firstDate = new Date(first[1]["created_at"]);
-			if (second[1]["created_at"] == "null")
-				secondDate = new Date(1970,01);
-			else
-				secondDate = new Date(second[1]["created_at"]);
-
-			return firstDate - secondDate;
-                });
-
+	
+		switch(selectedSort){
+			case 0:
+				// Sort by streamer name
+				streamersArray.sort(function(first, second) {
+					if (first[0] < second[0])
+						return -1;
+					else
+						return 1;
+				});
+				break;
+			case 1:
+				// Sort by Game
+				streamersArray.sort(function(first, second) {
+					if (first[1]["game"] < second[1]["game"])
+						return -1;
+					else
+						return 1;
+				});
+				break;
+			case 2:
+				// Sort by viewers
+				streamersArray.sort(function(first, second) {
+					return second[1]["viewers"] - first[1]["viewers"];
+				});
+				break;
+			default:
+				// Sort by uptime
+				streamersArray.sort(function(first, second) {
+					if (first[1]["created_at"] == "null")
+						firstDate = new Date (1970,01);
+					else
+						firstDate = new Date(first[1]["created_at"]);
+					if (second[1]["created_at"] == "null")
+						secondDate = new Date(1970,01);
+					else
+						secondDate = new Date(second[1]["created_at"]);
+		
+					return firstDate - secondDate;
+				});
+				break;
+		}
+	
 		var defaultpage = "https://twitch.tv/";
 		nfollowing=0;
 		nstreams=0;
@@ -157,54 +191,55 @@ $(document).ready(function () {
 					$("#streamersTable").append("<tr class=\" list-row\" id=\"row"+streamers[key][0]+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key][1]["title"]==null?"?":streamers[key][1]["title"]=="null"?"?":streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key][1]["url"]==null?(defaultpage+key):streamers[key][1]["url"]=="null"?(defaultpage+key):streamers[key][1]["url"])+"\" target=\"_blank\">"+streamers[key][0]+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+streamers[key][1]["game"]+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
 				else
 					$("#streamersTable").append("<tr class=\" list-row pure-table-odd\" id=\"row"+streamers[key][0]+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key][1]["title"]==null?"?":streamers[key][1]["title"]=="null"?"?":streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key][1]["url"]==null?(defaultpage+key):streamers[key][1]["url"]=="null"?(defaultpage+key):streamers[key][1]["url"])+"\" target=\"_blank\">"+streamers[key][0]+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+streamers[key][1]["game"]+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
-
+	
 			}
 		}
 		$("#streamersTable").append("</tbody>");
-
+	
 		$(".masterTooltip").bind("mouseenter", showTooltip);
-
+	
 		$(".masterTooltip").bind("mouseleave", hideTooltip);
 		$(".masterTooltip").bind("mousemove", updateTooltip);
 		
 		$(".popout").bind("click",popoutStream);
-
-
+	
+	
 		$("#loadingFollowing").hide();
 		$("#loadingStreams").hide();
-
+	
 		if (nfollowing <= 0){
 			$("#noFollowing").show();
 			$("#unfollowAll").hide();
 			$("#manageFollowingButton").hide();
 			$("#streamersDiv").hide();
 		}
-
+	
 		if (nstreams <= 0 && nfollowing > 0){
 			$("#noStreams").show();
 			$("#streamersTableDiv").hide();
 			$("#streamersTable").hide();
 			$("#streamersDiv").show();
 		}
-
+	
 		if (nstreams > 0) {
 			$("#streamersDiv").show();
 		}
-
+	
 		browser.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
 			tabUrl = arrayOfTabs[0].url;
-
+	
 			if (tabUrl.indexOf("twitch.tv/") != -1){
 				var parts = tabUrl.split('/');
 				var name = parts[3];
 				name = name.toLowerCase();
-
+	
 				/* Check if name is a streamer */
 				twitchAPICall(0,name).done(function (result) {
 					userID = getUserID(result)
 					if (userID > 0) {
 						if (streamersDict[name]) {
 							remove = 1;
+							$("#heart-div").show();
 							$("#unfollowCurrentButton").show();
 							$(".currentMessage").html(" Unfollow " + name);
 							$("#unfollowCurrentButton").bind("click", {name: name, remove: remove}, followCurrent);
@@ -219,6 +254,7 @@ $(document).ready(function () {
 						}
 						else {
 							remove = 0;
+							$("#heart-div").show();
 							$("#followCurrentButton").show();
 							$(".currentMessage").html(" Follow " + name);
 							$("#followCurrentButton").bind("click", {name: name, remove: remove}, followCurrent);
@@ -232,12 +268,17 @@ $(document).ready(function () {
 							});
 						}
 					}
+					else {
+						$("#heart-div").hide();
+					}
 				});
 			}
 		});
-
 	});
 });
+
+
+
 
 function popoutStream(e){
 	var url = $(this).next().attr('href');
@@ -254,13 +295,13 @@ function showTooltip(e){
 	.fadeIn('slow');
 	var mousex = e.pageX - 20; //Get X coordinates
 
-	// if(e.pageY < 70) {
-		// var mousey = e.pageY + $('.tooltip').height(); //Get Y coordinates
-		var mousey = 0;
-	// }
-	// else {
-	// 	var mousey = e.pageY - 50 - $('.tooltip').height(); //Get Y coordinates
-	// }
+	if(e.pageY < 70) {
+		mousex = e.pageX;
+		var mousey = e.pageY + $('.tooltip').height(); //Get Y coordinates
+	}
+	else {
+		var mousey = e.pageY - 50 - $('.tooltip').height(); //Get Y coordinates
+	}
 	$('.tooltip')
 	.css({ top: mousey, left: mousex })
 }
@@ -306,7 +347,13 @@ function hideTooltip(e){
 
 function updateTooltip(e){
 	var mousex = e.pageX - 20; //Get X coordinates
-	var mousey = e.pageY - 50 - $('.tooltip').height(); //Get Y coordinates\
+	if(e.pageY < 70) {
+		mousex = e.pageX;
+		var mousey = e.pageY + $('.tooltip').height(); //Get Y coordinates
+	}
+	else {
+		var mousey = e.pageY - 50 - $('.tooltip').height(); //Get Y coordinates
+	}
 	$('.tooltip')
 	.css({ top: mousey, left: mousex })
 }

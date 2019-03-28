@@ -78,16 +78,28 @@ body {
 
 
 body .tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr min-content min-content;
+  display: flex;
   align-items: baseline;
 }
+body .tabs .heart {
+  display: inline-block;
+  border-bottom: 1px solid black;
+  padding: 4px;
+  font-size: 125%;
+}
+body .tabs .heart .unfollow-button:hover {
+  color: #CC2929;
+}
+body .tabs .heart .follow-button:hover {
+  color: #29CC29;
+}
 body .tabs .tab {
-  display: block;
+  display: flex;
+  flex-grow: 1;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   border: 1px solid black;
-  text-align: center;
+  justify-content: center;
   align-self: center;
   padding: 7px 0px 4px;
   font-weight: bold;
@@ -105,23 +117,12 @@ body .tabs .tab .tab-icon {
   font-size: 100%;
   padding-right: 4px;
 }
-body .tabs .heart {
-  border-bottom: 1px solid black;
-  padding: 4px;
-  font-size: 125%;
-}
-body .tabs .unfollow-button:hover {
-  color: #CC2929;
-}
-body .tabs .follow-button:hover {
-  color: #29CC29;
-}
 
 
 body .streamersDiv {
   display: block;
   overflow: auto;
-  min-height: 150px;
+  /* min-height: 150px; */
   max-height: 380px;
   border-left: 1px solid black;
   border-right: 1px solid black;
