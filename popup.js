@@ -85,12 +85,56 @@ $(document).ready(function () {
 	$("#versionDiv").append(browser.runtime.getManifest().version);
 
 	browser.storage.local.get({streamers:{}}, function (result) {
-		streamers = result.streamers;
+		streamersDict = result.streamers;
+		// Creating an array based on the dictionary list for it to be sorted
+		streamersArray = Object.keys(streamersDict).map(function(key) {
+			return [key, streamersDict[key]];
+		});
+
+		// Sort functions
+
+		// Sort by viewers
+		/*streamersArray.sort(function(first, second) {
+			return second[1]["viewers"] - first[1]["viewers"];
+		});*/
+
+		// Sort by streamer name
+                /*streamersArray.sort(function(first, second) {
+			if (first[0] < second[0])
+				return -1;
+			else
+				return 1;
+                });*/
+
+		// Sort by Game
+                /*streamersArray.sort(function(first, second) {
+                        if (first[1]["game"] < second[1]["game"])
+                                return -1;
+                        else
+                                return 1;
+                });*/
+
+		// Sort by uptime
+                streamersArray.sort(function(first, second) {
+			if (first[1]["created_at"] == "null")
+				firstDate = new Date (1970,01);
+			else
+				firstDate = new Date(first[1]["created_at"]);
+			if (second[1]["created_at"] == "null")
+				secondDate = new Date(1970,01);
+			else
+				secondDate = new Date(second[1]["created_at"]);
+
+			return firstDate - secondDate;
+                });
+
 		var defaultpage = "https://twitch.tv/";
 		nfollowing=0;
 		nstreams=0;
 		$("#streamersTable").append("<tbody>");
-
+		// Looping on the dictionary first
+		// We will keep the following list unsorted / sorted alphabetically
+		streamers = streamersDict;
 		for (var key in streamers){
 			nfollowing++;
 			$("#followingTable").show();
@@ -100,14 +144,19 @@ $(document).ready(function () {
 				$("#followingTable").append("<tr class=\"pure-table-odd\" id=\""+key+"\"><td><a class=\"streamerpage\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:#29CC29\">Online</span></td>":"<td><span style=\"color:#CC2929\">Offline</span></td>")+"<td><a title=\"Unfollow "+key+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
 			$("#unfollow-"+key+"").bind("click", {name: key, remove: 1}, followCurrent);
 			$("#notifications-"+key+"").bind("click", {name: key}, check_single_notifications);
-			if (streamers[key].flag){
+		}
+		// Looping on the array now
+		// This one we want to sort
+		streamers = streamersArray;
+		for (var key in streamers){
+			if (streamers[key][1]["flag"]){
 				nstreams++;
 				$("#streamersTableDiv").show();
 				$("#streamersTable").show();
 				if (nstreams % 2 == 0)
-					$("#streamersTable").append("<tr class=\" list-row\" id=\"row"+key+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key].title==null?"?":streamers[key].title=="null"?"?":streamers[key].title)+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td><td><img src=\""+loadIcon(streamers[key].game)+"\" title=\""+streamers[key].game+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key].viewers+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key].created_at)+"</span></td></tr>");
+					$("#streamersTable").append("<tr class=\" list-row\" id=\"row"+streamers[key][0]+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key][1]["title"]==null?"?":streamers[key][1]["title"]=="null"?"?":streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key][1]["url"]==null?(defaultpage+key):streamers[key][1]["url"]=="null"?(defaultpage+key):streamers[key][1]["url"])+"\" target=\"_blank\">"+streamers[key][0]+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+streamers[key][1]["game"]+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
 				else
-					$("#streamersTable").append("<tr class=\" list-row pure-table-odd\" id=\"row"+key+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key].title==null?"?":streamers[key].title=="null"?"?":streamers[key].title)+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td><td><img src=\""+loadIcon(streamers[key].game)+"\" title=\""+streamers[key].game+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key].viewers+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key].created_at)+"</span></td></tr>");
+					$("#streamersTable").append("<tr class=\" list-row pure-table-odd\" id=\"row"+streamers[key][0]+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key][1]["title"]==null?"?":streamers[key][1]["title"]=="null"?"?":streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key][1]["url"]==null?(defaultpage+key):streamers[key][1]["url"]=="null"?(defaultpage+key):streamers[key][1]["url"])+"\" target=\"_blank\">"+streamers[key][0]+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+streamers[key][1]["game"]+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
 
 			}
 		}
@@ -154,7 +203,7 @@ $(document).ready(function () {
 				twitchAPICall(0,name).done(function (result) {
 					userID = getUserID(result)
 					if (userID > 0) {
-						if (streamers[name]) {
+						if (streamersDict[name]) {
 							remove = 1;
 							$("#unfollowCurrentButton").show();
 							$(".currentMessage").html(" Unfollow " + name);
@@ -223,9 +272,9 @@ function getUptime(created){
 	var todayDate = new Date()
 	var streamDate = new Date(created);
 	var delta = Math.abs(todayDate - streamDate) / 1000;
-	var hours = Math.floor(delta / 3600) % 24;
+	var hours = Math.floor(delta / 3600);
 	delta -= hours * 3600;
-	var minutes = Math.floor(delta / 60) % 60;
+	var minutes = Math.floor(delta / 60);
 	if (hours > 0){
 		return hours+"h"+" "+minutes+"m"
 	}
