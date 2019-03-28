@@ -35,22 +35,22 @@ $(document).ready(function () {
 			return false;
 		}
 	});
-	$("#thfirst").on({
+	$("#streamersTable #thfirst").on({
 		click: function(){
 			changeSort(0);
 		}
 	});
-	$("#thsecond").on({
+	$("#streamersTable #thsecond").on({
 		click: function(){
 			changeSort(1);
 		}
 	});
-	$("#ththird").on({
+	$("#streamersTable #ththird").on({
 		click: function(){
 			changeSort(2);
 		}
 	});
-	$("#thfourth").on({
+	$("#streamersTable #thfourth").on({
 		click: function(){
 			changeSort(3);
 		}
