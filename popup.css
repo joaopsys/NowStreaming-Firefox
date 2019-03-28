@@ -147,10 +147,13 @@ body .streamersDiv .streamersTableDiv .streamersTable {
   max-height:450px;
   width: 100%;
 }
-body .streamersDiv .streamersTableDiv .streamersTable thead{
+body .streamersDiv .streamersTableDiv .streamersTable thead {
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 500;
+}
+body .streamersDiv .streamersTableDiv .streamersTable thead tr th {
+  cursor: pointer;
 }
 body .streamersDiv .streamersTableDiv .streamersTable tbody .list-row {
   text-transform: capitalize;
