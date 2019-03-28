@@ -11,7 +11,7 @@ function restore_options() {
   }, function(items) {
   	$('input[type=checkbox]').each(function () {
   		var current = this.id.substring(this.id.indexOf('-')+1)
-  		this.checked = streamers[current].notify;
+  		this.checked = items.streamers[current].notify;
   	});
     //document.getElementById('notifications').checked = items.notifications;
     //document.getElementById('checkadd').checked = items.add;
