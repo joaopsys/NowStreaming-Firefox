@@ -1,9 +1,9 @@
-$(document).ready(function () {
-	let nfollowing = 0;
-	let nstreams = 0;
-	let selectedSort = 2;
-	let descendingOrder = true;
+var nfollowing = 0;
+var nstreams = 0;
+var selectedSort = 2;
+var descendingOrder = true;
 
+$(document).ready(function () {
 	$("#optionsDiv").hide();
 	$('#heart-div').hide();
 	$("#followCurrentButton").hide();
@@ -37,50 +37,22 @@ $(document).ready(function () {
 	});
 	$("#thfirst").on({
 		click: function(){
-			if(this.selectedSort === 0) {
-				this.descendingOrder = !this.descendingOrder;
-			} else {
-				this.selectedSort = 0;
-				this.descendingOrder = true;
-			}
-			console.log('wat0');
-			updateTable(this.selectedSort, this.descendingOrder);
+			changeSort(0);
 		}
 	});
 	$("#thsecond").on({
 		click: function(){
-			if(this.selectedSort === 1) {
-				this.descendingOrder = !this.descendingOrder;
-			} else {
-				this.selectedSort = 1;
-				this.descendingOrder = true;
-			}
-			console.log('wat1');
-			updateTable(this.selectedSort, this.descendingOrder);
+			changeSort(1);
 		}
 	});
 	$("#ththird").on({
 		click: function(){
-			if(this.selectedSort === 2) {
-				this.descendingOrder = !this.descendingOrder;
-			} else {
-				this.selectedSort = 2;
-				this.descendingOrder = true;
-			}
-			console.log('wat2');
-			updateTable(this.selectedSort, this.descendingOrder);
+			changeSort(2);
 		}
 	});
 	$("#thfourth").on({
 		click: function(){
-			if(this.selectedSort === 3) {
-				this.descendingOrder = !this.descendingOrder;
-			} else {
-				this.selectedSort = 3;
-				this.descendingOrder = true;
-			}
-			console.log('wat3');
-			updateTable(this.selectedSort, this.descendingOrder);
+			changeSort(3);
 		}
 	});
 	$("#toggleOptions").on({
@@ -104,18 +76,18 @@ $(document).ready(function () {
 				$("#optionsDiv").hide();
 				$("#toggleOptions").removeClass("selected-tab");
 
-				if(this.nfollowing <= 0) {
+				if(nfollowing <= 0) {
 					$("#noFollowing").show();
 				}
-				if(this.nstreams <= 0 && this.nfollowing > 0) {
+				if(nstreams <= 0 && nfollowing > 0) {
 					$("#noStreams").show();
 					$("#streamersDiv").show();
 				}
-				if(this.nstreams > 0) {
+				if(nstreams > 0) {
 					$("#streamersDiv").show();
 				}
 			}
-			updateTable(this.selectedSort, this.descendingOrder);
+			updateTable();
 		}
 	});
 	$("#followingTable").hide();
@@ -136,13 +108,12 @@ $(document).ready(function () {
 
 	$("#versionDiv").append(browser.runtime.getManifest().version);
 
-	updateTable(this.selectedSort);
+	updateTable();
 });
 
 
 // 0 = streamer, 1 = game, 2 = viewers, 3 = uptime
-function updateTable(selectedSort = 2, descendingOrder = true) {
-	console.log('--> Update table called with sort ' + selectedSort);
+function updateTable() {
 	browser.storage.local.get({streamers:{}}, function (result) {
 		streamersDict = result.streamers;
 		// Creating an array based on the dictionary list for it to be sorted
@@ -156,18 +127,18 @@ function updateTable(selectedSort = 2, descendingOrder = true) {
 				// Sort by streamer name
 				streamersArray.sort(function(first, second) {
 					if (first[0] < second[0])
-						return descendingOrder ? -1 : 1;
-					else
 						return descendingOrder ? 1 : -1;
+					else
+						return descendingOrder ? -1 : 1;
 				});
 				break;
 			case 1:
 				// Sort by Game
 				streamersArray.sort(function(first, second) {
 					if (first[1]["game"] < second[1]["game"])
-						return descendingOrder ? -1 : 1;
-					else
 						return descendingOrder ? 1 : -1;
+					else
+						return descendingOrder ? -1 : 1;
 				});
 				break;
 			case 2:
@@ -194,16 +165,16 @@ function updateTable(selectedSort = 2, descendingOrder = true) {
 		}
 
 		var defaultpage = "https://twitch.tv/";
-		this.nfollowing=0;
-		this.nstreams=0;
+		nfollowing=0;
+		nstreams=0;
 		$("#tableBody").empty();
 		// Looping on the dictionary first
 		// We will keep the following list unsorted / sorted alphabetically
 		streamers = streamersDict;
 		for (var key in streamers){
-			this.nfollowing++;
+			nfollowing++;
 			$("#followingTable").show();
-			if (this.nfollowing%2==0)
+			if (nfollowing%2==0)
 				$("#followingTable").append("<tr id=\""+key+"\"><td><a class=\"streamerpage\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:#29CC29\">Online</span></td>":"<td><span style=\"color:#CC2929\">Offline</span></td>")+"<td><a title=\"Unfollow "+key+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
 			else
 				$("#followingTable").append("<tr class=\"pure-table-odd\" id=\""+key+"\"><td><a class=\"streamerpage\" href=\""+(streamers[key].url==null?(defaultpage+key):streamers[key].url=="null"?(defaultpage+key):streamers[key].url)+"\" target=\"_blank\">"+key+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:#29CC29\">Online</span></td>":"<td><span style=\"color:#CC2929\">Offline</span></td>")+"<td><a title=\"Unfollow "+key+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
@@ -215,10 +186,10 @@ function updateTable(selectedSort = 2, descendingOrder = true) {
 		streamers = streamersArray;
 		for (var key in streamers){
 			if (streamers[key][1]["flag"]){
-				this.nstreams++;
+				nstreams++;
 				$("#streamersTableDiv").show();
 				$("#streamersTable").show();
-				if (this.nstreams % 2 == 0)
+				if (nstreams % 2 == 0)
 					$("#streamersTable").append("<tr class=\" list-row\" id=\"row"+streamers[key][0]+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key][1]["title"]==null?"?":streamers[key][1]["title"]=="null"?"?":streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key][1]["url"]==null?(defaultpage+key):streamers[key][1]["url"]=="null"?(defaultpage+key):streamers[key][1]["url"])+"\" target=\"_blank\">"+streamers[key][0]+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+streamers[key][1]["game"]+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
 				else
 					$("#streamersTable").append("<tr class=\" list-row pure-table-odd\" id=\"row"+streamers[key][0]+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+(streamers[key][1]["title"]==null?"?":streamers[key][1]["title"]=="null"?"?":streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+(streamers[key][1]["url"]==null?(defaultpage+key):streamers[key][1]["url"]=="null"?(defaultpage+key):streamers[key][1]["url"])+"\" target=\"_blank\">"+streamers[key][0]+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+streamers[key][1]["game"]+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
@@ -238,26 +209,26 @@ function updateTable(selectedSort = 2, descendingOrder = true) {
 		$("#loadingFollowing").hide();
 		$("#loadingStreams").hide();
 
-		if (this.nfollowing <= 0){
+		if (nfollowing <= 0){
 			$("#noFollowing").show();
 			$("#unfollowAll").hide();
 			$("#manageFollowingButton").hide();
 			$("#streamersDiv").hide();
 		}
 
-		if (this.nstreams <= 0 && this.nfollowing > 0){
+		if (nstreams <= 0 && nfollowing > 0){
 			$("#noStreams").show();
 			$("#streamersTableDiv").hide();
 			$("#streamersTable").hide();
 			$("#streamersDiv").show();
 		}
 
-		if (this.nstreams > 0) {
+		if (nstreams > 0) {
 			$("#streamersDiv").show();
 		}
 
 		browser.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
-			tabUrl = arrayOfTabs[0].url;
+			var tabUrl = arrayOfTabs[0].url;
 
 			if (tabUrl.indexOf("twitch.tv/") != -1){
 				var parts = tabUrl.split('/');
@@ -306,6 +277,46 @@ function updateTable(selectedSort = 2, descendingOrder = true) {
 			}
 		});
 	});
+}
+
+function changeSort(newSelection) {
+	if(selectedSort === newSelection) {
+		descendingOrder = !descendingOrder;
+	} else {
+		descendingOrder = true;
+	}
+	selectedSort = newSelection;
+	updateSortIcons();
+	updateTable();
+}
+
+function updateSortIcons() {
+	// Remove current selection icon
+	$(".sortIcon").remove();
+
+	// Add new selection icon
+	let columnName;
+	switch(selectedSort) {
+		case 0:
+			columnName = "#thfirst";
+			break;
+		case 1:
+			columnName = "#thsecond";
+			break;
+		case 2:
+			columnName = "#ththird";
+			break;
+		default:
+			columnName = "#thfourth";
+			break;
+	}
+
+	if(descendingOrder) {
+		$(columnName).append("<i class=\"sortIcon fas fa-sort-down\"></i>");
+	}
+	else {
+		$(columnName).append("<i class=\"sortIcon fas fa-sort-up\"></i>");
+	}
 }
 
 function popoutStream(e){
