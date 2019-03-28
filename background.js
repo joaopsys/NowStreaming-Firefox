@@ -82,9 +82,7 @@ browser.runtime.onStartup.addListener(function() {
 				};
 			}
 		}
-		//console.log(streamers);
 		browser.storage.local.set({'streamers': streamers}, function () {
-			//console.log("Meti isto ^ no local ");
 			updateCore(1,function(){});
 		});
 	});
@@ -120,7 +118,6 @@ browser.runtime.onInstalled.addListener(function () {
 				};
 			}
 		}
-		//console.log(streamers);
 		browser.storage.local.set({'streamers': streamers,'notifications':result.notifications,'add':result.add}, function () {
 			updateCore(1,function(){});
 		});
@@ -188,7 +185,6 @@ function updateCore(is_first_run,callback) {
 	/*Load streamers*/
 	browser.storage.local.get({streamers:{},'notifications':true}, function (result) {
 		streamers = result.streamers;
-		//console.log(streamers);
 
 		/* Not following anyone? Don't do anything */
 
@@ -227,15 +223,12 @@ function updateCore(is_first_run,callback) {
 			twitchAPIBackgroundCall(1, urlAppend.slice(0,-1)).done(function (json) {
 				var onlineStreams=0;
 				/* If anyone is streaming then this loop will run */
-				//console.log(json);
-				//console.log("Length: "+json.streams.length+" e "+json._total);
 				for (i=0;i<json.streams.length;i++){
 					/* We will need this temp so we can check which streamers are NOT streaming in the end */
 					temp.push(json.streams[i].channel.name);
 					onlineStreams++;
 					/* If stream is up and notification has not been sent, then send it */
 					if (result.notifications && !is_first_run && streamers[json.streams[i].channel.name].flag == 0 && (streamers[json.streams[i].channel.name].created_at != json.streams[i].created_at) && streamers[json.streams[i].channel.name].notify){
-						//console.log("A mandar not do "+json.streams[i].channel.name);
 						tmpname = json.streams[i].channel.name;
 						tmpurl = json.streams[i].channel.url;
 						var opt = {
@@ -260,7 +253,6 @@ function updateCore(is_first_run,callback) {
 				/* Check which ones were not streaming so we reset values */
 				for (var key in streamers){
 					if (temp.indexOf(key) == -1){
-						//console.log("Meti alguem a 0 -"+key);
 						streamers[key].flag = 0;
 					}
 				}
