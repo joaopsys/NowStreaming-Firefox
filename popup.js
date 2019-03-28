@@ -327,6 +327,8 @@ function popoutStream(e){
 
 function showTooltip(e){
 	var title = $(this).attr('title');
+	if (!title)
+		return;
 	$(this).data('tipText', title).removeAttr('title');
 	$('<p class="tooltip"></p>')
 	.text(title)
