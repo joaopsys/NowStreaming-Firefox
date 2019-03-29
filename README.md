@@ -15,18 +15,11 @@ PS: You don't need a Twitch account to use NowStreaming!
 
 First Steps:
 - Install the extension! :)
-- Go watch a stream on Twitch
-- Hit the NowStreaming icon while watching the stream, and start following it!
-- That stream will now appear on your NowStreaming popup and you will get notifications everytime it goes online
+- Hit the NowStreaming icon
+- Start following a channel using the text box or import your follow list from Twitch in the Options tab.
+- Those channels will now appear on your NowStreaming Streams tab when they are live and you will get notifications every time that happens!
 
 If you don't want to receive notifications, you can always disable it in the Options Menu.
-
-Advanced Steps:
-- You can import your Twitch following list to Now Streaming!
-- Hit the Show Options button!
-- Hit the Import from Twitch Button
-- Enter your Twitch username
-- Submit!
 
 Anything you do on NowStreaming *WILL NOT* affect your Twitch account.
 
