@@ -41,6 +41,13 @@ https://www.behance.net/igorcarraco
 ==============================
 Changelog:
 
+2.0.0:
+- Visual and functional improvements to the popup layout
+- Implements sorting on streamer name, game, viewers and uptime by clicking the respective column
+- Fixes a bug that caused the stream's uptime to be miscalculated
+- Fix various sanitization issues
+- Other minor bug fixes
+
 1.8.1:
 - Minor fixes to icon loading on Firefox
 
