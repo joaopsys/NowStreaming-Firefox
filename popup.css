@@ -31,7 +31,7 @@
 }
 .dark-theme {
   --accept: #29CC29;
-  --body-background: #2e2e2e;
+  --body-background: #2D2D2D;
   --body-border: grey;
   --donate-link: #568dac;
   --import-border: grey;
@@ -42,12 +42,12 @@
   --input-shadow-focus: #969696;
   --popout-icon: #a0a0a0;
   --selection: #5c7caf;
-  --tab-background: #0c0c0c;
-  --tab-background-selected: #202020;
-  --table-even: #2e2e2e;
+  --tab-background: #202020;
+  --tab-background-selected: #2D2D2D;
+  --table-even: #1E1E1E;
   --table-header: #646262;
   --table-header-text: #ddd9d9;
-  --table-odd: #141414;
+  --table-odd: #2D2D2D;
   --text-color: #cecdcd;
   --tooltip-background: #4e4e4e;
   --tooltip-border: #333;
@@ -188,8 +188,8 @@ body .streamersDiv {
   display: block;
   overflow: auto;
   max-height: 380px;
-  border-left: 1px solid var(--body-border);
-  border-right: 1px solid var(--body-border);
+  /* border-left: 1px solid var(--body-border);
+  border-right: 1px solid var(--body-border); */
   
 }
 body .streamersDiv .noStreams {
@@ -249,8 +249,8 @@ body .fastFollow {
   justify-content: center;
   padding: 16px;
   text-decoration: none;
-  border-left: 1px solid var(--body-border);
-  border-right: 1px solid var(--body-border);
+  /* border-left: 1px solid var(--body-border);
+  border-right: 1px solid var(--body-border); */
 }
 body .fastFollow input {
   width: 230px;
@@ -269,15 +269,15 @@ body .fastFollow i:hover {
 body .fast-follow-message {
   display: flex;
   justify-content: center;
-  border-left: 1px solid var(--body-border);
-  border-right: 1px solid var(--body-border);
+  /* border-left: 1px solid var(--body-border);
+  border-right: 1px solid var(--body-border); */
   padding-bottom: 8px;
 }
 
 .no-following {
   display: grid;
-  border-left: 1px solid var(--body-border);
-  border-right: 1px solid var(--body-border);
+  /* border-left: 1px solid var(--body-border);
+  border-right: 1px solid var(--body-border); */
 }
 .no-following .no-following-instructions {
   padding-left: 40px;
@@ -300,8 +300,8 @@ body .fast-follow-message {
 .optionsDiv {
   display: grid;
   padding: 16px;
-  border-left: 1px solid var(--body-border);
-  border-right: 1px solid var(--body-border);
+  /* border-left: 1px solid var(--body-border);
+  border-right: 1px solid var(--body-border); */
 }
 .optionsDiv .management-area {
   display: grid;
@@ -481,7 +481,7 @@ body .fast-follow-message {
 
 
 footer{
-  border: 1px solid var(--body-border);
+  /* border: 1px solid var(--body-border); */
   border-top: none;
   padding: 0px 8px 8px;
   color: var(--import-border);
