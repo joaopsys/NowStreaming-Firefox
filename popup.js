@@ -2,7 +2,6 @@ var nfollowing = 0;
 var nstreams = 0;
 var selectedSort = 2;
 var descendingOrder = true;
-var lightMode = false;
 
 $(document).ready(function () {
 	$("#optionsDiv").hide();
@@ -95,7 +94,7 @@ $(document).ready(function () {
 
 	$("#themeArea").on({
 		click: function(){
-			updateTheme();
+			changeTheme();
 		}
 	})
 	//$("#forceUpdate").bind("click", onForceUpdate);
@@ -287,15 +286,25 @@ function updateTable() {
 }
 
 function updateTheme() {
-	root = document.documentElement;
-	if(lightMode) {
-		root.classList.remove('light-theme');
-		root.classList.add('dark-theme');
-	} else {
-		root.classList.remove('dark-theme')
-		root.classList.add('light-theme');
-	}
-	this.lightMode = !this.lightMode;
+	browser.storage.local.get({'darkmode':false}, function (result) {
+	        root = document.documentElement;
+		darkMode = result.darkmode
+        	if(darkMode) {
+                	root.classList.remove('light-theme');
+                	root.classList.add('dark-theme');
+        	} else {
+                	root.classList.remove('dark-theme')
+                	root.classList.add('light-theme');
+        	}
+	});
+}
+
+function changeTheme() {
+        browser.storage.local.get({'darkmode':false}, function (result) {
+                browser.storage.local.set({'darkmode': !result.darkmode}, function () {
+			updateTheme();
+                });
+	});
 }
 
 function changeSort(newSelection) {
