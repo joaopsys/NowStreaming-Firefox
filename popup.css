@@ -146,13 +146,13 @@ body {
 
 body .tabs {
   display: flex;
-  align-items: baseline;
 }
 body .tabs .heart {
-  display: inline-block;
+  display: flex;
   border-bottom: 1px solid var(--body-border);
   padding: 4px;
   font-size: 125%;
+  align-items: center;
 }
 body .tabs .heart .unfollow-button:hover {
   color: var(--warning);
