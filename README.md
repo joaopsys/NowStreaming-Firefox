@@ -28,6 +28,9 @@ Feel free to comment about things you like/don't like, I'll give it a look.
 If you like this extension and want to support me, you can Donate through PayPal, I'll be very grateful:
 https://www.paypal.me/joaopsys
 
+Big thank you to Joca64 for the visual improvements and overall contributions: https://github.com/Joca64
+Big thank you to Pedro for the new logo: https://github.com/pedroordep
+
 ==============================
 Changelog:
 
