@@ -16,6 +16,7 @@
   --input-shadow-focus: #969696;
   --popout-icon: #555;
   --selection: #2a5db0;
+  --stream-name: #2a5db0;
   --tab-background: #ebebe0;
   --tab-background-selected: #F8F8F8;
   --table-even: #F8F8F8;
@@ -42,6 +43,7 @@
   --input-shadow-focus: #969696;
   --popout-icon: #a0a0a0;
   --selection: #5c7caf;
+  --stream-name: #34dbcd;
   --tab-background: #202020;
   --tab-background-selected: #2D2D2D;
   --table-even: #1E1E1E;
@@ -125,7 +127,7 @@ textarea[type="text"].focus {
 }
 #loadingStreams,
 #loadingFollowing{
-  text-align: center!important;
+  text-align: center !important;
 }
 
 
@@ -188,9 +190,6 @@ body .streamersDiv {
   display: block;
   overflow: auto;
   max-height: 380px;
-  /* border-left: 1px solid var(--body-border);
-  border-right: 1px solid var(--body-border); */
-  
 }
 body .streamersDiv .noStreams {
   display: grid;
@@ -210,6 +209,7 @@ body .streamersDiv .streamersTableDiv .streamersTable {
   overflow:auto;
   max-height:450px;
   width: 100%;
+  border-top: none;
 }
 body .streamersDiv .streamersTableDiv .streamersTable thead {
   background-color: var(--table-header);
@@ -225,9 +225,6 @@ body .streamersDiv .streamersTableDiv .streamersTable tbody .list-row {
   text-transform: capitalize;
   text-decoration: none;
 }
-body .streamersDiv .streamersTableDiv .streamersTable tbody .list-row .pure-table-odd {
-  background-color: red !important;
-}
 body .streamersDiv .streamersTableDiv .streamersTable tbody .list-row i {
   padding-right: 8px;
   color: var(--popout-icon);
@@ -236,7 +233,7 @@ body .streamersDiv .streamersTableDiv .streamersTable tbody .list-row i:hover {
   cursor: pointer;
 }
 body .streamersDiv .streamersTableDiv .streamersTable tbody .list-row a {
-  color: var(--selection);
+  color: var(--stream-name);
   text-decoration: none;
 }
 
@@ -249,8 +246,6 @@ body .fastFollow {
   justify-content: center;
   padding: 16px;
   text-decoration: none;
-  /* border-left: 1px solid var(--body-border);
-  border-right: 1px solid var(--body-border); */
 }
 body .fastFollow input {
   width: 230px;
@@ -269,15 +264,11 @@ body .fastFollow i:hover {
 body .fast-follow-message {
   display: flex;
   justify-content: center;
-  /* border-left: 1px solid var(--body-border);
-  border-right: 1px solid var(--body-border); */
   padding-bottom: 8px;
 }
 
 .no-following {
   display: grid;
-  /* border-left: 1px solid var(--body-border);
-  border-right: 1px solid var(--body-border); */
 }
 .no-following .no-following-instructions {
   padding-left: 40px;
@@ -289,7 +280,7 @@ body .fast-follow-message {
   font-weight: bold;
 }
 #followingTable a:not(.unfollowstreamer){
-  color: var(--selection);
+  color: var(--stream-name);
   float:left;
 }
 #followingTable a{
@@ -300,8 +291,6 @@ body .fast-follow-message {
 .optionsDiv {
   display: grid;
   padding: 16px;
-  /* border-left: 1px solid var(--body-border);
-  border-right: 1px solid var(--body-border); */
 }
 .optionsDiv .management-area {
   display: grid;
@@ -481,7 +470,6 @@ body .fast-follow-message {
 
 
 footer{
-  /* border: 1px solid var(--body-border); */
   border-top: none;
   padding: 0px 8px 8px;
   color: var(--import-border);
