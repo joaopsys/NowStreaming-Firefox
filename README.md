@@ -34,6 +34,11 @@ https://www.behance.net/igorcarraco
 ==============================
 Changelog:
 
+2.1.0:
+- New feature: Dark mode
+- New logo!
+- Improve sorting to be more intuitive
+
 2.0.0:
 - Visual and functional improvements to the popup layout
 - Implements sorting on streamer name, game, viewers and uptime by clicking the respective column
