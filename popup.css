@@ -187,7 +187,6 @@ body .tabs .tab .tab-icon {
 body .streamersDiv {
   display: block;
   overflow: auto;
-  /* min-height: 150px; */
   max-height: 380px;
   border-left: 1px solid var(--body-border);
   border-right: 1px solid var(--body-border);
@@ -310,13 +309,16 @@ body .fast-follow-message {
   grid-gap: 12px;
   padding-bottom: 8px;
 }
-.optionsDiv .management-area .notifications{
+.optionsDiv .management-area .notifications {
   display: grid;
   grid-template-columns: min-content 1fr;
   grid-gap: 8px;
   padding-bottom: 8px;
   align-content: center;
   justify-self: center;
+}
+.optionsDiv .management-area .notifications:hover {
+  color: var(--selection);
 }
 .optionsDiv .management-area .follow-list{
   display: grid;
@@ -331,6 +333,9 @@ body .fast-follow-message {
 .optionsDiv .management-area .theme-area{
   display: flex;
   cursor: pointer;
+}
+.optionsDiv .management-area .theme-area:hover {
+  color: var(--selection);
 }
 .optionsDiv .management-area .theme-area .theme-button{
   padding-right: 4px;
