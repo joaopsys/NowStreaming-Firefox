@@ -2,6 +2,7 @@ var nfollowing = 0;
 var nstreams = 0;
 var selectedSort = 2;
 var descendingOrder = true;
+var lightMode = false;
 
 $(document).ready(function () {
 	$("#optionsDiv").hide();
@@ -92,6 +93,11 @@ $(document).ready(function () {
 	});
 	$("#followingTable").hide();
 
+	$("#themeArea").on({
+		click: function(){
+			updateTheme();
+		}
+	})
 	//$("#forceUpdate").bind("click", onForceUpdate);
 	$("#submitButton").bind("click", function(){
 		browser.storage.local.get({
@@ -109,6 +115,7 @@ $(document).ready(function () {
 	$("#versionDiv").append(browser.runtime.getManifest().version);
 
 	updateTable();
+	updateTheme();
 });
 
 
@@ -175,9 +182,9 @@ function updateTable() {
 			nfollowing++;
 			$("#followingTable").show();
 			if (nfollowing%2==0)
-				$("#followingTable").append("<tr id=\""+key+"\"><td><a class=\"streamerpage\" href=\""+sanitize(streamers[key].url, defaultpage+key)+"\" target=\"_blank\">"+sanitize(key)+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:#29CC29\">Online</span></td>":"<td><span style=\"color:#CC2929\">Offline</span></td>")+"<td><a title=\"Unfollow "+sanitize(key)+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
+				$("#followingTable").append("<tr id=\""+key+"\"><td><a class=\"streamerpage table-even\" href=\""+sanitize(streamers[key].url, defaultpage+key)+"\" target=\"_blank\">"+sanitize(key)+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:#29CC29\">Online</span></td>":"<td><span style=\"color:var(--warning)\">Offline</span></td>")+"<td><a title=\"Unfollow "+sanitize(key)+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
 			else
-				$("#followingTable").append("<tr class=\"pure-table-odd\" id=\""+key+"\"><td><a class=\"streamerpage\" href=\""+sanitize(streamers[key].url, defaultpage+key)+"\" target=\"_blank\">"+sanitize(key)+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:#29CC29\">Online</span></td>":"<td><span style=\"color:#CC2929\">Offline</span></td>")+"<td><a title=\"Unfollow "+sanitize(key)+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
+				$("#followingTable").append("<tr class=\"table-odd\" id=\""+key+"\"><td><a class=\"streamerpage\" href=\""+sanitize(streamers[key].url, defaultpage+key)+"\" target=\"_blank\">"+sanitize(key)+"</a></td>"+(streamers[key].flag?"<td><span style=\"color:var(--accept)\">Online</span></td>":"<td><span style=\"color:var(--warning)\">Offline</span></td>")+"<td><a title=\"Unfollow "+sanitize(key)+"\" class=\"fa fa-times fa-lg masterTooltip unfollowstreamer\" id=\"unfollow-"+key+"\" href=\"#\"></a></td><td><input type =\"checkbox\" class=\"checkbox\" id=\"notifications-"+key+"\"/></td></tr>");
 			$("#unfollow-"+key+"").bind("click", {name: key, remove: 1}, followCurrent);
 			$("#notifications-"+key+"").bind("click", {name: key}, check_single_notifications);
 		}
@@ -190,9 +197,9 @@ function updateTable() {
 				$("#streamersTableDiv").show();
 				$("#streamersTable").show();
 				if (nstreams % 2 == 0)
-					$("#streamersTable").append("<tr class=\" list-row\" id=\"row"+sanitize(streamers[key][0])+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+sanitize(streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+sanitize(streamers[key][1]["url"], defaultpage+key)+"\" target=\"_blank\">"+sanitize(streamers[key][0])+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+sanitize(streamers[key][1]["game"])+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
+					$("#streamersTable").append("<tr class=\" list-row table-even\" id=\"row"+sanitize(streamers[key][0])+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+sanitize(streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+sanitize(streamers[key][1]["url"], defaultpage+key)+"\" target=\"_blank\">"+sanitize(streamers[key][0])+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+sanitize(streamers[key][1]["game"])+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
 				else
-					$("#streamersTable").append("<tr class=\" list-row pure-table-odd\" id=\"row"+sanitize(streamers[key][0])+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+sanitize(streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+sanitize(streamers[key][1]["url"], defaultpage+key)+"\" target=\"_blank\">"+sanitize(streamers[key][0])+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+sanitize(streamers[key][1]["game"])+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
+					$("#streamersTable").append("<tr class=\" list-row table-odd\" id=\"row"+sanitize(streamers[key][0])+"\"><td nowrap><i title=\"Popout this stream\" class=\"masterTooltip popout fas fa-share-square fa-lg\"></i><a title=\""+sanitize(streamers[key][1]["title"])+"\" class=\"streamerpage masterTooltip\" href=\""+sanitize(streamers[key][1]["url"], defaultpage+key)+"\" target=\"_blank\">"+sanitize(streamers[key][0])+"</a></td><td><img src=\""+loadIcon(streamers[key][1]["game"])+"\" title=\""+sanitize(streamers[key][1]["game"])+"\" class=\"masterTooltip\" width=\"30\" height=\"30\"/></td><td><span class=\"viewersclass\">"+streamers[key][1]["viewers"]+"</span></td><td nowrap><span class=\"uptimeclass\">"+getUptime(streamers[key][1]["created_at"])+"</span></td></tr>");
 
 			}
 		}
@@ -279,11 +286,27 @@ function updateTable() {
 	});
 }
 
+function updateTheme() {
+	root = document.documentElement;
+	if(lightMode) {
+		root.classList.remove('light-theme');
+		root.classList.add('dark-theme');
+	} else {
+		root.classList.remove('dark-theme')
+		root.classList.add('light-theme');
+	}
+	this.lightMode = !this.lightMode;
+}
+
 function changeSort(newSelection) {
 	if(selectedSort === newSelection) {
 		descendingOrder = !descendingOrder;
 	} else {
-		descendingOrder = true;
+		if(newSelection === 0 || newSelection === 1) {
+			descendingOrder = false;
+		} else {
+			descendingOrder = true;
+		}
 	}
 	selectedSort = newSelection;
 	updateSortIcons();

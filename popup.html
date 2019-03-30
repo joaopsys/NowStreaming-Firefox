@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html #htmlBody>
 	<head>
 		<script src="jquery-3.3.1.min.js"></script>
 		<script src="popup.js"></script>
@@ -76,6 +76,10 @@
 				<i class="fa fa-users"></i>
 				<div>Manage following list</div>
 			</div>
+			<div class="theme-area" id="themeArea">
+				<i #themeSwitch class="theme-button fas fa-adjust"></i>
+				Theme
+			</div>
 		</div>
 		
 		<div class="import-twitch">
@@ -137,7 +141,7 @@
 	<footer>
 		All game icons (if applicable) belong to their respective companies/owners.
 		<br>
-		Feel free to <a target="_blank" href="https://www.paypal.me/joaopsys">Donate</a> if you like this extension. Or don't, I know you're not reading this.
+		Feel free to <a class="donate" target="_blank" href="https://www.paypal.me/joaopsys">Donate</a> if you like this extension. Or don't, I know you're not reading this.
 		<br>
 		<div id="versionDiv">V. </div>
 	</footer>
