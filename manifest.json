@@ -9,7 +9,7 @@
 
 	"name": "NowStreaming - Twitch",
 	"description": "Manage your favorite Twitch streamers, get instant notifications when they come online, and much more!",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"author": "Jota",
 
 	"background": {
