@@ -34,6 +34,13 @@ Big thank you to Pedro for the new logo: https://github.com/pedroordep
 ==============================
 Changelog:
 
+2.1.2:
+  Set a fix max height for the popup window
+  Fix a bug where spaces could be added to streamer's usernames
+
+2.1.1:
+  Minor fixes
+
 2.1.0:
 - New feature: Dark mode
 - New logo!

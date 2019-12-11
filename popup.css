@@ -135,6 +135,7 @@ body {
   display: grid;
   grid-template-rows: repeat(5, min-content);
   width: 400px;
+  max-height: 500px;
   overflow: hidden;
   font-family: 'Ubuntu', sans-serif;
   font-weight: 400;

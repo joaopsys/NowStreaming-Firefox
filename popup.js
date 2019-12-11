@@ -616,8 +616,9 @@ function followCurrent(event){
 }
 
 function directFollow(user,remove){
+	// Trim due to possible spaces in the name
 	browser.runtime.getBackgroundPage(function(backgroundPage) {
-		backgroundPage.addToStorage(user,remove,function(){
+		backgroundPage.addToStorage(user.trim(),remove,function(){
 			location.reload();
 		});
 	});
