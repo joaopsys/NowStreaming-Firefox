@@ -637,7 +637,7 @@ function twitchAPICall(type, channel, limit, offset){
 			break;
 		case 1:
 			// Get user follows with limit and offset
-			var url = "https://api.twitch.tv/kraken/users/"+channel+"/follows/channels?limit="+limit+"&offset="+offset;
+			var url = "https://api.twitch.tv/kraken/users/"+channel+"/follows/channels?limit="+limit+"&offset="+offset+"&sortby=login";
 	}
 	return $.ajax({
 		url : url,
