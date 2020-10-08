@@ -9,11 +9,11 @@
 
 	"name": "NowStreaming - Twitch",
 	"description": "Manage your favorite Twitch streamers, get instant notifications when they come online, and much more!",
-	"version": "2.1.2",
+	"version": "2.2",
 	"author": "Jota",
 
 	"background": {
-		"scripts": ["background.js", "jquery-3.3.1.min.js"]
+		"scripts": ["background.js", "jquery-3.5.1.min.js"]
 	},
 
 	"icons": {
