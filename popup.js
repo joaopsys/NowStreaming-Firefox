@@ -1,7 +1,7 @@
 var nfollowing = 0;
 var nstreams = 0;
-var selectedSort = 2;
-var descendingOrder = true;
+var defaultDescendingOrder = true;
+var defaultSort = 3;
 
 $(document).ready(function () {
 	$("#optionsDiv").hide();
@@ -120,7 +120,7 @@ $(document).ready(function () {
 
 // 0 = streamer, 1 = game, 2 = viewers, 3 = uptime
 function updateTable() {
-	browser.storage.local.get({streamers:{}}, function (result) {
+	browser.storage.local.get({sortMethod: {}, streamers:{}}, function (result) {
 		streamersDict = result.streamers;
 		// Creating an array based on the dictionary list for it to be sorted
 		streamersArray = Object.keys(streamersDict).map(function(key) {
@@ -128,6 +128,9 @@ function updateTable() {
 		});
 
 		// Sort functions
+		selectedSort = result.sortMethod['selectedSort'] != null ? result.sortMethod['selectedSort'] : defaultSort;
+		descendingOrder = result.sortMethod['descendingOrder'] != null ? result.sortMethod['descendingOrder'] : defaultDescendingOrder;
+		updateSortIcons(selectedSort, descendingOrder);
 		switch(selectedSort){
 			case 0:
 				// Sort by streamer name
@@ -168,8 +171,7 @@ function updateTable() {
 					return descendingOrder ? firstDate - secondDate : secondDate - firstDate;
 				});
 				break;
-		}
-
+			}
 		var defaultpage = "https://twitch.tv/";
 		nfollowing=0;
 		nstreams=0;
@@ -308,21 +310,22 @@ function changeTheme() {
 }
 
 function changeSort(newSelection) {
-	if(selectedSort === newSelection) {
-		descendingOrder = !descendingOrder;
-	} else {
-		if(newSelection === 0 || newSelection === 1) {
-			descendingOrder = false;
-		} else {
-			descendingOrder = true;
+	browser.storage.local.get({sortMethod: {}}, function(result) {
+		selectedSort = result.sortMethod['selectedSort'] != null ? result.sortMethod['selectedSort'] : defaultSort;
+                descendingOrder = result.sortMethod['descendingOrder'] != null ? result.sortMethod['descendingOrder'] : defaultDescendingOrder;
+		if(selectedSort == newSelection) {
+			descendingOrder = !descendingOrder;
 		}
-	}
-	selectedSort = newSelection;
-	updateSortIcons();
-	updateTable();
+		newSortMethod = {}
+		newSortMethod['selectedSort'] = newSelection;
+		newSortMethod['descendingOrder'] = descendingOrder;
+		browser.storage.local.set({sortMethod: newSortMethod}, function () {
+			updateTable();
+		});
+        });
 }
 
-function updateSortIcons() {
+function updateSortIcons(selectedSort, descendingOrder) {
 	// Remove current selection icon
 	$(".sortIcon").remove();
 
