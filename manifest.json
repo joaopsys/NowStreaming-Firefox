@@ -9,11 +9,11 @@
 
 	"name": "NowStreaming - Twitch",
 	"description": "Manage your favorite Twitch streamers, get instant notifications when they come online, and much more!",
-	"version": "2.2",
+	"version": "3.0",
 	"author": "Jota",
 
 	"background": {
-		"scripts": ["background.js", "jquery-3.5.1.min.js"]
+		"scripts": ["background.js", "jquery-3.6.0.min.js"]
 	},
 
 	"icons": {
@@ -33,8 +33,10 @@
 		"activeTab",
 		"alarms",
 		"storage",
+		"identity",
 		"http://api.twitch.tv/*",
 		"https://api.twitch.tv/*",
+		"https://id.twitch.tv/*",
 		"http://*.jtvnw.net/*",
 		"https://*.jtvnw.net/*"
 	]

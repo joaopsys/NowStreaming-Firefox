@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html #htmlBody>
 	<head>
-		<script src="jquery-3.5.1.min.js"></script>
+		<script src="jquery-3.6.0.min.js"></script>
 		<script src="popup.js"></script>
 		<link rel="stylesheet" type="text/css" href="popup.css">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+		<link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
 		<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,500,700' rel='stylesheet' type='text/css'>
 		<script src="options.js"></script>
 		<meta charset="utf-8"/>
@@ -24,7 +24,6 @@
 			<i class="tab-icon fas fa-cog"></i>Options
 		</div>
 	</div>
-
 	<div class="streamersDiv" id="streamersDiv">
 		<div class="noStreams" id="noStreams">There are <b>no streams online.</b></b></div>
 		<!-- <div class="loadingStreams" id="loadingStreams"><i class="fa fa-spinner fa-spin fa-5x"></i></div> -->
@@ -49,13 +48,13 @@
 			maxlength=26
 			class="inputclass"
 			type="text"
-			placeholder="Insert a Twitch streamer name to follow it"
+			placeholder="Insert a Twitch streamer name to follow them"
 			size="10"/>
 		<i id="submitFastFollow" class="fa fa-check fa-lg"></i>
 	</div>
 
 	<div class="fast-follow-message" id="fastFollowMessage"></div>
-	
+
 	<div class="no-following" id="noFollowing">
 		<div class="no-following-instructions">You're not following any streamer.</div>
 		<div class="no-following-instructions">To start using NowStreaming, you can either:</div>
@@ -64,6 +63,16 @@
 			<li>Click the <b>Import from Twitch</b> button in the <b>Options Menu</b> to import your Twitch following list.</li><br>
 			<li>Click the <b>Import Data</b> button in the <b>Options Menu</b> to directly import data, if you have exported it previously.</li>
 		</ul>
+	</div>
+
+	<div class="no-token" id="noToken">
+		<div class="no-token-instructions"><p style="color:lightcoral;"><b>Twitch now requires every user to authenticate!</b></div>
+		<div class="no-token-instructions"><p>To continue using NowStreaming, you will need to authenticate with your Twitch Account. I know, it sucks.</div>
+		<div class="no-token-instructions"><p>NowStreaming will not request any private data from your account.<br></div>
+		<button class="masterTooltip" id="authenticate" title="A new window will open where you will need to authenticate with Twitch">
+			<div class="fab fa-twitch fa-lg"></div>
+			Authenticate with Twitch
+		</button><br>&#8203;<br>
 	</div>
 	
 	<div class="optionsDiv" id="optionsDiv">
@@ -84,7 +93,7 @@
 		
 		<div class="import-twitch">
 			<div class="imports-inputs">
-				<input id="syncWithTwitchInput" maxlength=26 class="inputclass" type="text" placeholder="Insert a Twitch name to import its follow list" size="10"/>
+				<input id="syncWithTwitchInput" maxlength=26 class="inputclass" type="text" placeholder="Insert a Twitch name to import their follow list" size="10"/>
 				<button class="masterTooltip" id="submitButton" title="This will import the selected Twitch channel's follow list to NowStreaming.">
 					<div class="fab fa-twitch fa-lg"></div>
 					Import from Twitch

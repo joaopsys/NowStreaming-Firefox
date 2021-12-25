@@ -249,7 +249,7 @@ body .fastFollow {
   text-decoration: none;
 }
 body .fastFollow input {
-  width: 230px;
+  width: 240px;
 }
 body .fastFollow input::placeholder {
   font-style: italic;
@@ -272,7 +272,24 @@ body .fast-follow-message {
   display: grid;
 }
 .no-following .no-following-instructions {
+  padding-left: 30px;
+}
+.no-token {
+  display: grid;
+}
+.no-token .no-token-instructions {
   padding-left: 40px;
+}
+.no-token button:hover{
+  color: var(--twitch);
+}
+.no-token button{
+  justify-self: center;
+  height: 35px;
+  width: 200px;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: transparent;
 }
 
 #followingTable{
@@ -468,7 +485,6 @@ body .fast-follow-message {
   align-content: center;
   justify-content: center;
 }
-
 
 footer{
   border-top: none;

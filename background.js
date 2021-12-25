@@ -1,5 +1,9 @@
 //browser.browserAction.onClicked.addListener(click);
 browser.alarms.create({periodInMinutes: 1});
+var appClientID = "tn2qigcd7zaj1ivt1xbhw0fl2y99c4y";
+var OAuthState = getOAuthState();
+var OAuthAccessToken = '';
+var defaultpage = "https://twitch.tv/";
 
 function addToStorage(channel, type, callback){
 	// Type = 0 Follow
@@ -146,123 +150,184 @@ function getFollowing(){
 	});
 }
 
-function twitchAPIBackgroundCall(type, channels){
-	var appClientID = "tn2qigcd7zaj1ivt1xbhw0fl2y99c4y";
-	var acceptVersion = "application/vnd.twitchtv.v5+json";
-	switch(type){
-		case 0:
-			// User to IDs
-			var url = "https://api.twitch.tv/kraken/users/?login="+channels
-			break;
-		case 1:
-			// Get streams
-			var url = "https://api.twitch.tv/kraken/streams?limit=100&channel="+channels
-	}
+function initiateOAuth(){
+    authorize(true).then(extractAndSaveOAuthAccessToken).then(function(){
+        updateCore(1,function(){});
+	});
+}
+
+function setOAuthAccessToken(token) {
+    OAuthAccessToken = token;
+}
+
+// https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+function getOAuthState() {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < 50; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+}
+
+function extractAndSaveOAuthAccessToken(response_url){
+    url_parameters = new URL(response_url.replace('#', '?')).searchParams;
+    if (url_parameters.get('state') === OAuthState ) {
+        browser.storage.local.set({access_token: url_parameters.get('access_token')});
+        return url_parameters.get('access_token');
+    }
+}
+
+function authorize(prompt) {
+    var oauth_url = 'https://id.twitch.tv/oauth2/authorize?client_id=' + appClientID + '&redirect_uri=' + browser.identity.getRedirectURL() + '&response_type=token&force_verify='+prompt+'&state='+OAuthState;
+    return browser.identity.launchWebAuthFlow({url: oauth_url, interactive: true});
+}
+
+function validateOAuthAccessToken(token){
+	var url = "https://id.twitch.tv/oauth2/validate"
 	return $.ajax({
-		url : url,
+		url: url,
 		headers: {
 			'Client-ID': appClientID,
-			'Accept': acceptVersion
+			'Authorization': 'Bearer '+token
 		},
 		dataType: "json",
 		type: 'GET'
 	});
 }
 
+function twitchAPIBackgroundCall(type, channels){
+	switch(type){
+		case 0:
+			// User to IDs
+			var url = "https://api.twitch.tv/helix/users/?login="+channels.replaceAll(',','&login=');
+			break;
+		case 1:
+			// Get streams
+			var url = "https://api.twitch.tv/helix/streams?user_login="+channels.replaceAll(',','&user_login=');
+	}
+    return $.ajax({
+        url: url,
+        headers: {
+            'Client-ID': appClientID,
+            'Authorization': 'Bearer '+OAuthAccessToken
+        },
+        dataType: "json",
+        type: 'GET'
+    });
+}
+/* This was needed when Twitch forced the API to accept IDs only instead of usernames
 function getUserIDBatch(result){
 	ids = []
-	for (var i in result.users){
-		ids.push(result.users[i]._id);
+	for (var i in result.data){
+		ids.push(result.data[i].id);
 	}
 	return ids;
-}
+}*/
 
 function updateCore(is_first_run,callback) {
-	var json;
-	var streamers = {};
-	temp = [];
+    browser.storage.local.get({access_token:''}, function (result) {
+        validateOAuthAccessToken(result.access_token).done(function (json) {
+            setOAuthAccessToken(result.access_token);
+			var json;
+			var streamers = {};
+			temp = [];
 
-	/*Load streamers*/
-	browser.storage.local.get({streamers:{},'notifications':true}, function (result) {
-		streamers = result.streamers;
+			/*Load streamers*/
+			browser.storage.local.get({streamers:{},'notifications':true}, function (result) {
+				streamers = result.streamers;
 
-		/* Not following anyone? Don't do anything */
+				/* Not following anyone? Don't do anything */
 
-		if (isEmpty(streamers)){
-			browser.browserAction.setBadgeText({"text": ""});
-			callback();
-			return;
-		}
+				if (isEmpty(streamers)){
+					browser.browserAction.setBadgeText({"text": ""});
+					callback();
+					return;
+				}
 
-		/* Add streamers to URL so we can send them all in one request */
-		var urlAppend="";
-		var count=0;
-		var idsArray=[];
-		var streamersArray=Object.keys(streamers);
-		var processedCalls=0;
-		var totalCalls = Math.ceil(streamersArray.length/100);
-		streamersArray.forEach(function(listItem, index){
-			urlAppend+=listItem+",";
-			if ( (index != 0 && index % 99 == 0) || index == streamersArray.length - 1){
-				twitchAPIBackgroundCall(0, urlAppend.slice(0,-1)).done(function (json) {
-					idsArray = $.merge(idsArray, getUserIDBatch(json));
-					processedCalls++;
-					if (totalCalls == processedCalls){
-						getStreams();
+                /* This was needed when Twitch forced the API to accept IDs only instead of usernames
+                var urlAppend="";
+                var idsArray=[];
+                var processedCalls=0;
+                var totalCalls = Math.ceil(streamersArray.length/100);
+				streamersArray.forEach(function(listItem, index){
+					urlAppend+=listItem+",";
+					if ( (index != 0 && index % 99 == 0) || index == streamersArray.length - 1){
+						twitchAPIBackgroundCall(0, urlAppend.slice(0,-1)).done(function (json) {
+							idsArray = $.merge(idsArray, getUserIDBatch(json));
+							processedCalls++;
+							if (totalCalls == processedCalls){
+								getStreams();
+							}
+						});
+						urlAppend = "";
 					}
-				});
-				urlAppend = "";
-			}
-		});
+				});*/
 
-		function getStreams(){
-			var urlAppend="";
-			for (var i = 0; i < idsArray.length; i++){
-				urlAppend+=idsArray[i]+",";
-			}
-			twitchAPIBackgroundCall(1, urlAppend.slice(0,-1)).done(function (json) {
-				var onlineStreams=0;
-				/* If anyone is streaming then this loop will run */
-				for (i=0;i<json.streams.length;i++){
-					/* We will need this temp so we can check which streamers are NOT streaming in the end */
-					temp.push(json.streams[i].channel.name);
-					onlineStreams++;
-					/* If stream is up and notification has not been sent, then send it */
-					if (result.notifications && !is_first_run && streamers[json.streams[i].channel.name].flag == 0 && (streamers[json.streams[i].channel.name].created_at != json.streams[i].created_at) && streamers[json.streams[i].channel.name].notify){
-						tmpname = json.streams[i].channel.name;
-						tmpurl = json.streams[i].channel.url;
-						var opt = {
-						  type: "basic",
-						  title: "Live: "+json.streams[i].channel.display_name,
-						  message: "Game: "+(json.streams[i].game!=null?json.streams[i].game:"N/A")+"\n"+"Viewers: "+json.streams[i].viewers,
-						  contextMessage: "Click to watch the stream",
-						  iconUrl: json.streams[i].channel.logo!=null?json.streams[i].channel.logo:"icon.png",
-						  isClickable: true
+                var streamersArray=Object.keys(streamers);
+                getStreams();
+
+				function getStreams(){
+					var urlAppend="";
+					var onlineStreams = 0;
+					for (var i = 0; i < streamersArray.length; i++) {
+						urlAppend += streamersArray[i] + ",";
+						if ( (i != 0 && i % 99 == 0) || i == streamersArray.length - 1) {
+							twitchAPIBackgroundCall(1, urlAppend.slice(0, -1)).done(function (json) {
+								/* If anyone is streaming then this loop will run */
+								for (i = 0; i < json.data.length; i++) {
+									/* We will need this temp so we can check which streamers are NOT streaming in the end */
+									temp.push(json.data[i].user_login);
+									onlineStreams++;
+									/* If stream is up and notification has not been sent, then send it */
+									if (result.notifications && !is_first_run && streamers[json.data[i].user_login].flag == 0 && (streamers[json.data[i].user_login].created_at != json.data[i].started_at) && streamers[json.data[i].user_login].notify) {
+										tmpname = json.data[i].user_login;
+										tmpurl = defaultpage+json.data[i].user_login;
+                                        var opt = {
+                                            type: "basic",
+                                            title: "Live: " + json.data[i].user_name,
+                                            message: "Game: " + (json.data[i].game_name != null ? json.data[i].game_name : "N/A") + "\n" + "Viewers: " + json.data[i].viewer_count,
+                                            contextMessage: "Click to watch the stream",
+                                            isClickable: true
+                                        }
+										twitchAPIBackgroundCall(0, tmpname).done(function (data){
+                                            opt.iconUrl = data.data[0].profile_image_url != null ? data.data[0].profile_image_url : "icon.png";
+                                            browser.notifications.clear(tmpname + "-" + tmpurl, function (wasCleared) {
+                                            });
+                                            browser.notifications.create(tmpname + "-" + tmpurl, opt, function (id) {
+                                            });
+                                        });
+									}
+									streamers[json.data[i].user_login].game = json.data[i].game_name != null ? json.data[i].game_name : "N/A";
+									streamers[json.data[i].user_login].viewers = json.data[i].viewer_count != null ? json.data[i].viewer_count : "?";
+									streamers[json.data[i].user_login].title = json.data[i].title != null ? json.data[i].title : "?";
+									streamers[json.data[i].user_login].url = defaultpage + json.data[i].user_login;
+									streamers[json.data[i].user_login].created_at = json.data[i].started_at != null ? json.data[i].started_at : "?";
+									streamers[json.data[i].user_login].flag = 1;
+								}
+
+								/* Check which ones were not streaming so we reset values */
+								for (var key in streamers) {
+									if (temp.indexOf(key) == -1) {
+										streamers[key].flag = 0;
+									}
+								}
+								browser.storage.local.set({'streamers': streamers}, function () {
+									browser.browserAction.setBadgeBackgroundColor({"color": (onlineStreams == 0 ? "#B80000" : "#666161")});
+									browser.browserAction.setBadgeText({"text": "" + onlineStreams});
+									browser.browserAction.setBadgeTextColor({"color": '#FFFFFF'});
+									callback();
+								});
+							});
+							urlAppend = "";
 						}
-						browser.notifications.clear(tmpname+"-"+tmpurl, function(wasCleared) {});
-						browser.notifications.create(tmpname+"-"+tmpurl, opt, function(id){});
-					}
-					streamers[json.streams[i].channel.name].game = json.streams[i].game!=null?json.streams[i].game:"N/A";
-					streamers[json.streams[i].channel.name].viewers = json.streams[i].viewers!=null?json.streams[i].viewers:"?";
-					streamers[json.streams[i].channel.name].title = json.streams[i].channel.status!=null?json.streams[i].channel.status:"?";
-					streamers[json.streams[i].channel.name].url = json.streams[i].channel.url!=null?json.streams[i].channel.url:"https://twitch.tv/"+json.streams[i].channel.name;
-					streamers[json.streams[i].channel.name].created_at = json.streams[i].created_at!=null?json.streams[i].created_at:"?";
-					streamers[json.streams[i].channel.name].flag = 1;
-				}
-
-				/* Check which ones were not streaming so we reset values */
-				for (var key in streamers){
-					if (temp.indexOf(key) == -1){
-						streamers[key].flag = 0;
 					}
 				}
-				browser.storage.local.set({'streamers': streamers}, function () {
-					browser.browserAction.setBadgeBackgroundColor({"color": (onlineStreams==0?"#B80000":"#666161")});
-					browser.browserAction.setBadgeText({"text": ""+onlineStreams});
-					browser.browserAction.setBadgeTextColor({"color": '#FFFFFF'});
-				callback();
-				});
 			});
-		}
-	});
+        }).fail(function(xhr, status, error){
+            browser.storage.local.set({access_token: ''});
+        });
+    });
 }

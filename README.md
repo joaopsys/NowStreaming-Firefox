@@ -11,11 +11,10 @@ NowStreaming is an extension that will greatly improve the way you manage your f
 
 In addition to having all your favorite streamers in one place, NowStreaming will instantly notify you whenever they go online.
 
-PS: You don't need a Twitch account to use NowStreaming!
-
 First Steps:
 - Install the extension! :)
 - Hit the NowStreaming icon
+- Authenticate with Twitch
 - Start following a channel using the text box or import your follow list from Twitch in the Options tab.
 - Those channels will now appear on your NowStreaming Streams tab when they are live and you will get notifications every time that happens!
 
@@ -33,6 +32,16 @@ Big thank you to Pedro for the new logo: https://github.com/pedroordep
 
 ==============================
 Changelog:
+
+3.0:
+- Major update for Twitch Helix API compatibility
+- Fix limitation of maximum of 100 online streamers
+- Implement OAuth authentication with Twitch
+- Code cleanup and slight optimization
+- Allow sorting on the following list page
+- Fix bug when parsing a stream URL with referrals
+- Update JQuery, Pure CSS and FontAwesome
+- Fix minor typos
 
 2.2:
 - Remember last sorting method and sorting order
