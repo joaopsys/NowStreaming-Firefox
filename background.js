@@ -231,7 +231,6 @@ function updateCore(is_first_run,callback) {
     browser.storage.local.get({access_token:''}, function (result) {
         validateOAuthAccessToken(result.access_token).done(function (json) {
             setOAuthAccessToken(result.access_token);
-			var json;
 			var streamers = {};
 			temp = [];
 
@@ -327,7 +326,8 @@ function updateCore(is_first_run,callback) {
 				}
 			});
         }).fail(function(xhr, status, error){
-            browser.storage.local.set({access_token: ''});
+        	if (xhr.status == 401)
+        		browser.storage.local.set({access_token: ''});
         });
     });
 }
