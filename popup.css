@@ -306,6 +306,10 @@ body .fast-follow-message {
   text-decoration: none;
 }
 
+#followingTable #thfirst {
+  cursor: pointer;
+}
+
 .optionsDiv {
   display: grid;
   padding: 16px;
