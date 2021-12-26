@@ -60,6 +60,30 @@ function isEmpty(map) {
    return true;
 }
 
+// Listener used to communicate with the popup
+// request.type == 0: Calls updatecore using request.is_first_run
+// request.type == 1: Calls addToStorage using request.channel and request.subType
+// request.type == 3: Calls initiateOAuth
+browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+        switch (request.type) {
+            case 0:
+                // updateCore
+                updateCore(request.is_first_run, sendResponse)
+                break;
+            case 1:
+                // addToStorage
+                addToStorage(request.channel, request.subType, sendResponse)
+                break;
+            case 3:
+                // initiateOAuth
+                initiateOAuth();
+                sendResponse();
+                break;
+        }
+        return true;
+    }
+);
+
 browser.runtime.onStartup.addListener(function() {
 	browser.storage.local.get({streamers:{}, 'notifications':true}, function (result) {
 		streamers = result.streamers;
@@ -185,10 +209,9 @@ function authorize(prompt) {
     return browser.identity.launchWebAuthFlow({url: oauth_url, interactive: true});
 }
 
-function validateOAuthAccessToken(token){
+async function validateOAuthAccessToken(token){
 	var url = "https://id.twitch.tv/oauth2/validate"
-	return $.ajax({
-		url: url,
+	const response = await fetch(url, {
 		headers: {
 			'Client-ID': appClientID,
 			'Authorization': 'Bearer '+token
@@ -196,9 +219,10 @@ function validateOAuthAccessToken(token){
 		dataType: "json",
 		type: 'GET'
 	});
+	return response.json();
 }
 
-function twitchAPIBackgroundCall(type, channels){
+async function twitchAPIBackgroundCall(type, channels){
 	switch(type){
 		case 0:
 			// User to IDs
@@ -208,8 +232,7 @@ function twitchAPIBackgroundCall(type, channels){
 			// Get streams
 			var url = "https://api.twitch.tv/helix/streams?user_login="+channels.replaceAll(',','&user_login=');
 	}
-    return $.ajax({
-        url: url,
+    const response = await fetch(url, {
         headers: {
             'Client-ID': appClientID,
             'Authorization': 'Bearer '+OAuthAccessToken
@@ -217,6 +240,7 @@ function twitchAPIBackgroundCall(type, channels){
         dataType: "json",
         type: 'GET'
     });
+	return response.json();
 }
 /* This was needed when Twitch forced the API to accept IDs only instead of usernames
 function getUserIDBatch(result){
@@ -229,10 +253,15 @@ function getUserIDBatch(result){
 
 function updateCore(is_first_run,callback) {
     browser.storage.local.get({access_token:''}, function (result) {
-        validateOAuthAccessToken(result.access_token).done(function (json) {
+        validateOAuthAccessToken(result.access_token).then(json => {
+            if (json.status == 401) {
+                browser.storage.local.set({access_token: ''});
+                return;
+            }
+
             setOAuthAccessToken(result.access_token);
-			var streamers = {};
-			temp = [];
+            var streamers = {};
+            temp = [];
 
 			/*Load streamers*/
 			browser.storage.local.get({streamers:{},'notifications':true}, function (result) {
@@ -274,7 +303,7 @@ function updateCore(is_first_run,callback) {
 					for (var i = 0; i < streamersArray.length; i++) {
 						urlAppend += streamersArray[i] + ",";
 						if ( (i != 0 && i % 99 == 0) || i == streamersArray.length - 1) {
-							twitchAPIBackgroundCall(1, urlAppend.slice(0, -1)).done(function (json) {
+							twitchAPIBackgroundCall(1, urlAppend.slice(0, -1)).then(json => {
 								/* If anyone is streaming then this loop will run */
 								for (i = 0; i < json.data.length; i++) {
 									/* We will need this temp so we can check which streamers are NOT streaming in the end */
@@ -291,7 +320,7 @@ function updateCore(is_first_run,callback) {
                                             contextMessage: "Click to watch the stream",
                                             isClickable: true
                                         }
-										twitchAPIBackgroundCall(0, tmpname).done(function (data){
+										twitchAPIBackgroundCall(0, tmpname).then(data => {
                                             opt.iconUrl = data.data[0].profile_image_url != null ? data.data[0].profile_image_url : "icon.png";
                                             browser.notifications.clear(tmpname + "-" + tmpurl, function (wasCleared) {
                                             });
@@ -325,9 +354,6 @@ function updateCore(is_first_run,callback) {
 					}
 				}
 			});
-        }).fail(function(xhr, status, error){
-        	if (xhr.status == 401)
-        		browser.storage.local.set({access_token: ''});
         });
     });
 }

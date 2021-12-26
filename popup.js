@@ -130,8 +130,7 @@ $(document).ready(function () {
 });
 
 function authenticate(){
-    browser.runtime.getBackgroundPage(function(backgroundPage) {
-        backgroundPage.initiateOAuth();
+    browser.runtime.sendMessage({type: 3}, function() {
     });
 }
 
@@ -267,7 +266,7 @@ function updateTable() {
                 var name = new URL(tabUrl).pathname.substring(1).toLowerCase();
 
 				/* Check if name is a streamer */
-				twitchAPICall(0,name).done(function (result) {
+				twitchAPICall(0,name).then(result => {
 					userID = getUserID(result)
 					if (userID > 0) {
 						if (streamersDict[name]) {
@@ -427,17 +426,13 @@ function getUptime(created){
 function check_single_notifications(event){
 	var user = event.data.name;
 	if(document.getElementById("notifications-"+user).checked) {
-    	browser.runtime.getBackgroundPage(function(backgroundPage) {
-			backgroundPage.addToStorage(user,2,function(){
-			});
-		});
-	}
-	else{
-		browser.runtime.getBackgroundPage(function(backgroundPage) {
-			backgroundPage.addToStorage(user,3,function(){
-			});
-		});
-	}
+        browser.runtime.sendMessage({type: 1, channel: user, subType: 2}, function() {
+        });
+    }
+    else{
+        browser.runtime.sendMessage({type: 1, channel: user, subType: 3}, function() {
+        });
+    }
 }
 
 function hideTooltip(e){
@@ -483,7 +478,7 @@ $(window).keydown(function(event){
 function fastFollow(){
 	var user = document.getElementById("fastFollowInput").value;
 	user = user.toLowerCase();
-	twitchAPICall(0,user).done(function (result) {
+	twitchAPICall(0,user).then(result => {
 		userID = getUserID(result);
 		if (userID > 0)
 			directFollow(user,0);
@@ -524,10 +519,10 @@ function syncWithTwitch(pagination, storage, add){
 	}
 	else{
 		// We're ready to get his follows
-		twitchAPICall(0,user).done(function (result) {
+		twitchAPICall(0,user).then(result => {
 			var userID = getUserID(result)
 			if (userID > 0) {
-				twitchAPICall(1, userID, pagination).done(function (json) {
+				twitchAPICall(1, userID, pagination).then(json => {
 					if (json.data.length > 0) {
                         $("#importTwitchLoading").show();
 						for (var i = 0; i < json.data.length; i++) {
@@ -608,9 +603,7 @@ function importData(){
 				}
 			}
 			browser.storage.local.set({'streamers': streamers}, function () {
-				browser.runtime.getBackgroundPage(function(backgroundPage) {
-					backgroundPage.updateCore(1,function(){location.reload();});
-				});
+                onForceUpdate();
 			});
 		});
 	}catch(e){
@@ -639,10 +632,9 @@ function loadIcon(game) {
 }
 
 function onForceUpdate(){
-	browser.runtime.getBackgroundPage(function(backgroundPage) {
-		backgroundPage.updateCore(1,function(){location.reload();});
-		//location.reload();
-	});
+    browser.runtime.sendMessage({type: 0, is_first_run: 1}, function() {
+        location.reload();
+    });
 }
 
 function followCurrent(event){
@@ -650,15 +642,12 @@ function followCurrent(event){
 }
 
 function directFollow(user,remove){
-	// Trim due to possible spaces in the name
-	browser.runtime.getBackgroundPage(function(backgroundPage) {
-		backgroundPage.addToStorage(user.trim(),remove,function(){
-			location.reload();
-		});
-	});
+    browser.runtime.sendMessage({type: 1, channel: user.trim(), subType: remove}, function() {
+        location.reload();
+    });
 }
 
-function twitchAPICall(type, channel, pagination){
+async function twitchAPICall(type, channel, pagination){
 	switch(type){
 		case 0:
 			// User to ID
@@ -668,8 +657,7 @@ function twitchAPICall(type, channel, pagination){
 			// Get user follows with limit and offset
 			var url = "https://api.twitch.tv/helix/users/follows?from_id="+channel+"&first=100"+(pagination ? '&after='+pagination : '');
 	}
-	return $.ajax({
-		url : url,
+	const response = await fetch(url,{
 		headers: {
 			'Client-ID': appClientID,
             'Authorization': 'Bearer ' + OAuthAccessToken
@@ -677,6 +665,7 @@ function twitchAPICall(type, channel, pagination){
 		dataType: "json",
 		type: 'GET'
 	});
+	return response.json();
 }
 
 function sanitize(string, defaultreturn="?"){
