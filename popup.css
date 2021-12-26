@@ -435,6 +435,21 @@ body .fast-follow-message {
   font-size: 10px;
 }
 
+.optionsDiv .disconnect-twitch {
+  display: grid;
+  grid-template-columns: repeat(3, min-content);
+  grid-gap: 4px;
+  padding-top: 16px;
+  padding-left: 33px;
+  justify-content: left;
+  white-space: nowrap;
+  font-size: 16px;
+}
+.optionsDiv .disconnect-twitch:hover {
+  color: var(--warning);
+  cursor: pointer;
+}
+
 .optionsDiv .export-import {
   display: grid;
   grid-template-columns: 1fr 1fr;

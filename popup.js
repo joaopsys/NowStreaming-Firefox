@@ -19,6 +19,7 @@ $(document).ready(function () {
 	$("#loadingFollowing").show();
 	$("#loadingStreams").show();
 	$("#unfollowAll").show();
+    $("#disconnectTwitch").show();
 	$("#textBox").hide();
 	$("#importDiv").hide();
 	$("#fastFollowMessage").hide();
@@ -117,6 +118,7 @@ $(document).ready(function () {
 		});
 	});
 	$("#unfollowAll").bind("click", unfollowAll);
+    $("#disconnectTwitch").bind("click", disconnectTwitch);
 	$("#exportFollowingButton").bind("click", exportFollowing);
 	$("#importFollowingButton").bind("click",importFollowing);
     $("#authenticate").bind("click",authenticate);
@@ -134,21 +136,15 @@ function authenticate(){
     });
 }
 
+function disconnectTwitch(){
+    browser.runtime.sendMessage({type: 4}, function() {
+        onForceUpdate();
+    });
+}
+
 // 0 = streamer, 1 = game, 2 = viewers, 3 = uptime
 function updateTable() {
 	browser.storage.local.get({sortMethod: {}, streamers:{}, access_token: ''}, function (result) {
-		if (result.access_token == ''){
-            $("#noFollowing").hide();
-            $("#unfollowAll").hide();
-            $("#fastFollow").hide();
-            $("#manageFollowingButton").hide();
-            $("#streamersDiv").hide();
-            $("#noToken").show();
-            return
-		}
-		else{
-            OAuthAccessToken = result.access_token;
-		}
 		streamersDict = result.streamers;
 		// Creating an array based on the dictionary list for it to be sorted
 		streamersArray = Object.keys(streamersDict).map(function(key) {
@@ -214,6 +210,26 @@ function updateTable() {
 			$("#unfollow-"+streamers[key][0]+"").bind("click", {name: streamers[key][0], remove: 1}, followCurrent);
 			$("#notifications-"+streamers[key][0]+"").bind("click", {name: streamers[key][0]}, check_single_notifications);
 		}
+
+        $("#loadingFollowing").hide();
+
+        if (nfollowing <= 0){
+            $("#noFollowing").show();
+            $("#unfollowAll").hide();
+            $("#manageFollowingButton").hide();
+            $("#streamersDiv").hide();
+        }
+
+        OAuthAccessToken = result.access_token;
+        if (result.access_token == ''){
+            $("#noFollowing").hide();
+            $("#disconnectTwitch").hide();
+            $("#fastFollow").hide();
+            $("#streamersDiv").hide();
+            $("#noToken").show();
+            return;
+        }
+
 		// Looping on the array now
 		// This one we want to sort
 		streamers = streamersArray;
@@ -237,16 +253,7 @@ function updateTable() {
 		
 		$(".popout").bind("click",popoutStream);
 
-
-		$("#loadingFollowing").hide();
 		$("#loadingStreams").hide();
-
-		if (nfollowing <= 0){
-			$("#noFollowing").show();
-			$("#unfollowAll").hide();
-			$("#manageFollowingButton").hide();
-			$("#streamersDiv").hide();
-		}
 
 		if (nstreams <= 0 && nfollowing > 0){
 			$("#noStreams").show();
@@ -548,7 +555,10 @@ function syncWithTwitch(pagination, storage, add){
 				});
 			}
 			else{
-				$("#importTwitchFailMessage").html("<br>Invalid Twitch username.");
+				if (OAuthAccessToken == '')
+					$("#importTwitchFailMessage").html("You need to link your Twitch account with NowStreaming before using this feature.");
+				else
+                    $("#importTwitchFailMessage").html("Invalid Twitch username.");
 				$("#importTwitchFailMessage").css("font-weight","bold");
 				$("#importTwitchFailMessage").css("color","red");
 				$("#importTwitchFailMessage").show();
@@ -662,8 +672,7 @@ async function twitchAPICall(type, channel, pagination){
 			'Client-ID': appClientID,
             'Authorization': 'Bearer ' + OAuthAccessToken
 		},
-		dataType: "json",
-		type: 'GET'
+		method: 'GET'
 	});
 	return response.json();
 }
