@@ -528,8 +528,8 @@ function syncWithTwitch(pagination, storage, add){
 			var userID = getUserID(result)
 			if (userID > 0) {
 				twitchAPICall(1, userID, pagination).done(function (json) {
-					$("#importTwitchLoading").show();
 					if (json.data.length > 0) {
+                        $("#importTwitchLoading").show();
 						for (var i = 0; i < json.data.length; i++) {
 							storage.streamers[json.data[i].to_login] = {
 								flag: 1,
@@ -543,10 +543,17 @@ function syncWithTwitch(pagination, storage, add){
 						}
 						syncWithTwitch(json.pagination.cursor==null?'':json.pagination.cursor, storage, add);
 					}
+					else{
+                        $("#importTwitchFailMessage").html("<br>The follow list for that user is empty.");
+                        $("#importTwitchFailMessage").css("font-weight","bold");
+                        $("#importTwitchFailMessage").css("color","red");
+                        $("#importTwitchFailMessage").show();
+                        document.getElementById("syncWithTwitchInput").value = '';
+					}
 				});
 			}
 			else{
-				$("#importTwitchFailMessage").html("<br>Invalid Twitch username!");
+				$("#importTwitchFailMessage").html("<br>Invalid Twitch username.");
 				$("#importTwitchFailMessage").css("font-weight","bold");
 				$("#importTwitchFailMessage").css("color","red");
 				$("#importTwitchFailMessage").show();
@@ -622,7 +629,7 @@ function unfollowAll(){
 
 // Dirty, I know. But hey, it works and it's fast
 function loadIcon(game) {
-	var allowedIcons = ["apexlegends.png", "archeage.png", "battlefield3.png", "battlefield4.png", "callofdutyblackopsii.png", "callofdutyghosts.png", "chess.png", "counter-strikeglobaloffensive.png", "darksoulsii.png", "dayz.png", "destiny.png", "diabloiii.png", "diabloiiireaperofsouls.png", "don'tstarve.png", "dota2.png", "evolve.png", "fortnite.png", "garry'smod.png", "grandtheftautov.png", "guildwars2.png", "h1z1justsurvive.png", "h1z1kingofthekill.png", "hearthstone.png", "heroesofthestorm.png", "leagueoflegends.png", "left4dead2.png", "lethalleague.png", "lifeisfeudalyourown.png", "magicthegathering.png", "mariokart8.png", "middle-earthshadowofmordor.png", "minecraft.png", "music.png", "osu!.png", "outlast.png", "overwatch.png", "pathofexile.png", "payday2.png", "playerunknown'sbattlegrounds.png", "poker.png", "rift.png", "rocketleague.png", "runescape.png", "rust.png", "smite.png", "starcraftii.png", "thebindingofisaac.png", "thebindingofisaacrebirth.png", "theelderscrollsvskyrim.png", "theevilwithin.png", "thesims4.png", "thewalkingdead.png", "warframe.png", "wildstar.png", "worldoftanks.png", "worldofwarcraft.png"];
+	var allowedIcons = ["apexlegends.png", "archeage.png", "asmr.png", "battlefield3.png", "battlefield4.png", "callofdutyblackopsii.png", "callofdutyghosts.png", "chess.png", "counter-strikeglobaloffensive.png", "darksoulsii.png", "dayz.png", "destiny.png", "diabloiii.png", "diabloiiireaperofsouls.png", "don'tstarve.png", "dota2.png", "evolve.png", "escapefromtarkov.png", "justchatting.png", "fortnite.png", "finalfantasyxivonline.png", "garry'smod.png", "grandtheftautov.png", "guildwars2.png", "h1z1justsurvive.png", "h1z1kingofthekill.png", "hearthstone.png", "heroesofthestorm.png", "hades.png", "leagueoflegends.png", "left4dead2.png", "lostark.png", "lethalleague.png", "lifeisfeudalyourown.png", "magicthegathering.png", "mariokart8.png", "mariokart8deluxe.png", "newworld.png", "middle-earthshadowofmordor.png", "minecraft.png", "music.png", "osu!.png", "outlast.png", "overwatch.png", "pathofexile.png", "payday2.png", "playerunknown'sbattlegrounds.png", "poker.png", "rift.png", "rocketleague.png", "runescape.png", "rust.png", "smite.png", "starcraftii.png", "thebindingofisaac.png", "thebindingofisaacrebirth.png", "theelderscrollsvskyrim.png", "theevilwithin.png", "thesims4.png", "vrchat.png", "valorant.png", "teamfighttactics.png", "deadbydaylight.png", "thewalkingdead.png", "warframe.png", "wildstar.png", "worldoftanks.png", "worldofwarcraft.png"];
 	var generatedIcon = game.replace(/\:| /g,'').toLowerCase()+".png";
 
 	if (allowedIcons.includes(generatedIcon))

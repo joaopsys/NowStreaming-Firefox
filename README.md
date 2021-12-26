@@ -42,6 +42,7 @@ Changelog:
 - Fix bug when parsing a stream URL with referrals
 - Update JQuery, Pure CSS and FontAwesome
 - Fix minor typos
+- Update game icons
 
 2.2:
 - Remember last sorting method and sorting order

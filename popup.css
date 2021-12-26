@@ -253,6 +253,7 @@ body .fastFollow input {
 }
 body .fastFollow input::placeholder {
   font-style: italic;
+  color: black;
 }
 body .fastFollow i {
   line-height: 20px;
@@ -378,6 +379,7 @@ body .fast-follow-message {
 }
 .optionsDiv .import-twitch .imports-inputs input::placeholder {
   font-style: italic;
+  color: black;
 }
 .optionsDiv .import-twitch .imports-inputs button{
   justify-self: center;
@@ -386,6 +388,7 @@ body .fast-follow-message {
   border-radius: 8px;
   padding: 8px;
   background-color: transparent;
+  color: var(--text-color);
 }
 .optionsDiv .import-twitch button:hover{
   color: var(--twitch);
