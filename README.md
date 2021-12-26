@@ -35,6 +35,7 @@ Changelog:
 
 3.0:
 - Major update for Twitch Helix API compatibility
+- Update to Manifest v3 (Chrome version)
 - Fix limitation of maximum of 100 online streamers
 - Implement OAuth authentication with Twitch
 - Code cleanup and slight optimization

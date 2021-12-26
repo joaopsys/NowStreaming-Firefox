@@ -291,6 +291,7 @@ body .fast-follow-message {
   border-radius: 8px;
   padding: 8px;
   background-color: transparent;
+  color: var(--text-color);
 }
 
 #followingTable{
@@ -393,7 +394,7 @@ body .fast-follow-message {
 .optionsDiv .import-twitch button:hover{
   color: var(--twitch);
 }
-.optionsDiv .import-twitch .inportTwitchUser {
+.optionsDiv .import-twitch .importTwitchUser {
   display: grid;
   grid-auto-columns: min-content;
 }
