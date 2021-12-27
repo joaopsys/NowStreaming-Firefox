@@ -33,6 +33,10 @@ Big thank you to Pedro for the new logo: https://github.com/pedroordep
 ==============================
 Changelog:
 
+3.1:
+- Remove HTTP calls
+- Add missing game icons (Chrome version)
+
 3.0:
 - Major update for Twitch Helix API compatibility
 - Update to Manifest v3 (Chrome version)
