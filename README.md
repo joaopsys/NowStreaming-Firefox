@@ -35,7 +35,7 @@ Changelog:
 
 3.1:
 - Remove HTTP calls
-- Add missing game icons (Chrome version)
+- Add missing game icons
 
 3.0:
 - Major update for Twitch Helix API compatibility
