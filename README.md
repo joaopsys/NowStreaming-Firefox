@@ -33,10 +33,13 @@ Big thank you to Pedro for the new logo: https://github.com/pedroordep
 ==============================
 Changelog:
 
-3.2:
+3.4:
 - Fix/Update the "Import From Twitch" button: Due to Twitch's new API limitations, from now on this function will only be able to read and import your own user's followed channels. It will not be possible to import the list of other user's followed channels. For 99% of users, this will not be a significant change.
 - Update Twitch OAuth permissions accordingly
 - You will need to disconnect from twitch (in the Options menu) and re-authenticate for these changes to take effect
+
+3.2 - 3.3:
+- Skipped on Firefox
 
 3.1:
 - Remove HTTP calls
