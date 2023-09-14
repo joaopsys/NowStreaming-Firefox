@@ -533,7 +533,7 @@ function syncWithTwitch(pagination, storage, add){
 					if (json.data.length > 0) {
                         $("#importTwitchLoading").show();
 						for (var i = 0; i < json.data.length; i++) {
-							storage.streamers[json.data[i].to_login] = {
+							storage.streamers[json.data[i].broadcaster_login] = {
 								flag: 1,
 								game: "null",
 								viewers: -1,
@@ -665,7 +665,7 @@ async function twitchAPICall(type, channel, pagination){
 			break;
 		case 1:
 			// Get user follows with limit and offset
-			var url = "https://api.twitch.tv/helix/users/follows?from_id="+channel+"&first=100"+(pagination ? '&after='+pagination : '');
+			var url = "https://api.twitch.tv/helix/channels/followed?user_id="+channel+"&first=100"+(pagination ? '&after='+pagination : '');
 	}
 	const response = await fetch(url,{
 		headers: {
